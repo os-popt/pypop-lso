@@ -32,3 +32,9 @@ def ellipsoid(x):
     weights = np.power(10, 6 * np.linspace(0, 1, num=x.size))
     y = np.dot(weights, np.power(x, 2))
     return y
+
+def rosenbrock(x):
+    x = _transform_and_check_size(x)
+    y = 100 * np.sum(np.power(x[1:] - np.power(x[:-1], 2), 2)) + \
+        np.sum(np.power(x[:-1] - 1, 2))
+    return y
