@@ -27,6 +27,12 @@ def sphere(x):
     y = np.sum(np.power(x, 2))
     return y
 
+def cigar(x):
+    x = _transform_and_check_size(x)
+    x = np.power(x, 2)
+    y = x[0] + (10 ** 6) * np.sum(x[1:])
+    return y
+
 def ellipsoid(x):
     x = _transform_and_check_size(x)
     weights = np.power(10, 6 * np.linspace(0, 1, num=x.size))
