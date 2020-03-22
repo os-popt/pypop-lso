@@ -33,6 +33,12 @@ def cigar(x):
     y = x[0] + (10 ** 6) * np.sum(x[1:])
     return y
 
+def discus(x):
+    x = _transform_and_check_size(x)
+    x = np.power(x, 2)
+    y = (10 ** 6) * x[0] + np.sum(x[1:])
+    return y
+
 def ellipsoid(x):
     x = _transform_and_check_size(x)
     weights = np.power(10, 6 * np.linspace(0, 1, num=x.size))
