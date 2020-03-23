@@ -45,6 +45,11 @@ def ellipsoid(x):
     y = np.dot(weights, np.power(x, 2))
     return y
 
+def parabolic_ridge(x):
+    x = _transform_and_check_size(x)
+    y = -x[0] + 100 * np.sum(np.power(x[1:], 2))
+    return y
+
 def rosenbrock(x):
     x = _transform_and_check_size(x)
     y = 100 * np.sum(np.power(x[1:] - np.power(x[:-1], 2), 2)) + \
