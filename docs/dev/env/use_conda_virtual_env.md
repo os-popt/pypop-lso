@@ -8,12 +8,15 @@ $ conda activate .\virtual_env
 $ conda install --prefix .\virtual_env\ python=3.7.6
 $ python --version # make sure Python is installed successfully
 Python 3.7.6
-$ pip install numpy==1.18.1
+$ pip install numpy==1.18.1 setuptools==46.1.1
 $ python
 Python 3.7.6 (default, Jan  8 2020, 20:23:39)
 >>> import numpy as np # make sure NumPy is installed successfully
 >>> np.__version__
 '1.18.1'
+>>> import setuptools
+>>> setuptools.__version__
+'46.1.1'
 >>> exit()
 $ conda deactivate
 ```
