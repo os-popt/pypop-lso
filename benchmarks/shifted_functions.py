@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import continuous_functions
 from continuous_functions import _transform_and_check
 
 
@@ -33,3 +34,8 @@ def generate_shift_vector(func_name, n_dim, low, high):
     shift_vector = np.random.uniform(low, high)
     np.savetxt(data_path, shift_vector)
     return shift_vector
+
+def sphere(x, shift_vector=None):
+    x = _load_shift_vector(sphere, x, shift_vector)
+    y = continuous_functions.sphere(x)
+    return y
