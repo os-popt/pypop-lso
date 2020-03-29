@@ -39,3 +39,8 @@ def sphere(x, shift_vector=None):
     x = _load_shift_vector(sphere, x, shift_vector)
     y = continuous_functions.sphere(x)
     return y
+
+def cigar(x, shift_vector=None):
+    x = _load_shift_vector(cigar, x, shift_vector)
+    y = continuous_functions.cigar(x)
+    return y
