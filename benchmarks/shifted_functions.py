@@ -8,7 +8,7 @@ from continuous_functions import _transform_and_check
 def _load_shift_vector(func, x, shift_vector=None):
     x = _transform_and_check(x)
     if shift_vector is None:
-        if (not hasattr(func, 'shift_vector')) or (func.shift_vector.size != x.size):
+        if (not hasattr(func, "shift_vector")) or (func.shift_vector.size != x.size):
             data_path = os.path.join("po_input_data", "shift_vector___" +
                 func.__name__ + "_dim_" + str(x.size) + ".txt")
             shift_vector = _transform_and_check(np.loadtxt(data_path))
@@ -26,6 +26,15 @@ def _load_shift_vector(func, x, shift_vector=None):
 
 
 def generate_shift_vector(func_name, n_dim, low, high):
+    low, high = _transform_and_check(low), _transform_and_check(high)
+    if low.size == 1:
+        low = np.tile(low, n_dim)
+    if high.size == 1:
+        high = np.tile(high, n_dim)
+    if low.size != n_dim:
+        raise TypeError("low'size should equal n_dim.")
+    if high.size != n_dim:
+        raise TypeError("high'size should equal n_dim.")
     data_folder = "po_input_data"
     if not os.path.exists(data_folder):
         os.mkdir(data_folder)
