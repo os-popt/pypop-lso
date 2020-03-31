@@ -53,3 +53,8 @@ def cigar(x, shift_vector=None):
     x = _load_shift_vector(cigar, x, shift_vector)
     y = continuous_functions.cigar(x)
     return y
+
+def discus(x, shift_vector=None):
+    x = _load_shift_vector(discus, x, shift_vector)
+    y = continuous_functions.discus(x)
+    return y
