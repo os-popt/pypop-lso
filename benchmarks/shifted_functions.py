@@ -58,3 +58,8 @@ def discus(x, shift_vector=None):
     x = _load_shift_vector(discus, x, shift_vector)
     y = continuous_functions.discus(x)
     return y
+
+def ellipsoid(x, shift_vector=None):
+    x = _load_shift_vector(ellipsoid, x, shift_vector)
+    y = continuous_functions.ellipsoid(x)
+    return y
