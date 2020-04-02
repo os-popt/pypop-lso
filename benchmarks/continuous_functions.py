@@ -60,3 +60,11 @@ def rosenbrock(x):
     y = 100 * np.sum(np.power(x[1:] - np.power(x[:-1], 2), 2)) + \
         np.sum(np.power(x[:-1] - 1, 2))
     return y
+
+# multi-modal functions
+def ackley(x):
+    x = _transform_and_check(x)
+    y = -20 * np.exp(-0.2 * np.sqrt(np.sum(np.power(x, 2)) / x.size)) - \
+        np.exp(np.sum(np.cos(2 * np.pi * x)) / x.size) + \
+        20 + np.exp(1)
+    return y
