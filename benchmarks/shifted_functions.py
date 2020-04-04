@@ -63,3 +63,8 @@ def ellipsoid(x, shift_vector=None):
     x = _load_shift_vector(ellipsoid, x, shift_vector)
     y = continuous_functions.ellipsoid(x)
     return y
+
+def parabolic_ridge(x, shift_vector=None):
+    x = _load_shift_vector(parabolic_ridge, x, shift_vector)
+    y = continuous_functions.parabolic_ridge(x)
+    return y
