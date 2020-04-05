@@ -68,3 +68,8 @@ def parabolic_ridge(x, shift_vector=None):
     x = _load_shift_vector(parabolic_ridge, x, shift_vector)
     y = continuous_functions.parabolic_ridge(x)
     return y
+
+def sharp_ridge(x, shift_vector=None):
+    x = _load_shift_vector(sharp_ridge, x, shift_vector)
+    y = continuous_functions.sharp_ridge(x)
+    return y
