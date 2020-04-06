@@ -73,3 +73,8 @@ def sharp_ridge(x, shift_vector=None):
     x = _load_shift_vector(sharp_ridge, x, shift_vector)
     y = continuous_functions.sharp_ridge(x)
     return y
+
+def rosenbrock(x, shift_vector=None):
+    x = _load_shift_vector(rosenbrock, x, shift_vector)
+    y = continuous_functions.rosenbrock(x + 1)
+    return y
