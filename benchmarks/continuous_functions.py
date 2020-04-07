@@ -62,6 +62,12 @@ def rosenbrock(x):
     return y
 
 # multi-modal functions
+def griewank(x):
+    x = _transform_and_check(x)
+    y = np.sum(np.power(x, 2)) / 4000 - np.prod(np.cos(
+        x / np.sqrt(np.arange(1, x.size+1)))) + 1
+    return y
+
 def ackley(x):
     x = _transform_and_check(x)
     y = -20 * np.exp(-0.2 * np.sqrt(np.sum(np.power(x, 2)) / x.size)) - \
