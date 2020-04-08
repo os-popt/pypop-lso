@@ -79,3 +79,8 @@ def rastrigin(x):
     x = _transform_and_check(x)
     y = 10 * x.size + np.sum(np.power(x, 2) - 10 * np.cos(2 * np.pi * x))
     return y
+
+def schwefel(x):
+    x = _transform_and_check(x)
+    y = 418.9828872724339 * x.size - np.sum(x * np.sin(np.sqrt(np.abs(x))))
+    return y
