@@ -80,6 +80,14 @@ def rastrigin(x):
     y = 10 * x.size + np.sum(np.power(x, 2) - 10 * np.cos(2 * np.pi * x))
     return y
 
+def schaffer(x):
+    x = _transform_and_check_size(x)
+    x = np.power(x, 2)
+    x = x[:-1] + x[1:]
+    y = np.sum(np.power(x, 0.25) * (np.power(np.sin(
+        50 * np.power(x, 0.1)), 2) + 1.0))
+    return y
+
 def schwefel(x):
     x = _transform_and_check(x)
     y = 418.9828872724339 * x.size - np.sum(x * np.sin(np.sqrt(np.abs(x))))
