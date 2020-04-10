@@ -55,6 +55,12 @@ def sharp_ridge(x):
     y = -x[0] + 100 * np.sqrt(np.sum(np.power(x[1:], 2)))
     return y
 
+def schwefel12(x):
+    x = _transform_and_check_size(x)
+    x = [np.sum(x[:i + 1]) for i in range(x.size)]
+    y = np.sum(np.power(x, 2))
+    return y
+
 def rosenbrock(x):
     x = _transform_and_check_size(x)
     y = 100 * np.sum(np.power(x[1:] - np.power(x[:-1], 2), 2)) + \
