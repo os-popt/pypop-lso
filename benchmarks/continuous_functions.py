@@ -98,3 +98,10 @@ def schwefel(x):
     x = _transform_and_check(x)
     y = 418.9828872724339 * x.size - np.sum(x * np.sin(np.sqrt(np.abs(x))))
     return y
+
+def bohachevsky(x):
+    x = _transform_and_check_size(x)
+    xx = np.power(x, 2)
+    y = np.sum(xx[:-1] + 2 * xx[1:] - 0.3 * np.cos(3 * np.pi * x[:-1]) -
+        0.4 * np.cos(4 * np.pi * x[1:]) + 0.7)
+    return y
