@@ -83,3 +83,9 @@ def rosenbrock(x, shift_vector=None):
     x = _load_shift_vector(rosenbrock, x, shift_vector)
     y = continuous_functions.rosenbrock(x + 1)
     return y
+
+# multi-modal functions
+def griewank(x, shift_vector=None):
+    x = _load_shift_vector(griewank, x, shift_vector)
+    y = continuous_functions.griewank(x)
+    return y
