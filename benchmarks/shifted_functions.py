@@ -91,3 +91,8 @@ def griewank(x, shift_vector=None):
     x = _load_shift_vector(griewank, x, shift_vector)
     y = continuous_functions.griewank(x)
     return y
+
+def ackley(x, shift_vector=None):
+    x = _load_shift_vector(ackley, x, shift_vector)
+    y = continuous_functions.ackley(x)
+    return y
