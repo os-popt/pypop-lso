@@ -96,3 +96,8 @@ def ackley(x, shift_vector=None):
     x = _load_shift_vector(ackley, x, shift_vector)
     y = continuous_functions.ackley(x)
     return y
+
+def rastrigin(x, shift_vector=None):
+    x = _load_shift_vector(rastrigin, x, shift_vector)
+    y = continuous_functions.rastrigin(x)
+    return y
