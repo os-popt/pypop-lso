@@ -106,3 +106,8 @@ def schaffer(x, shift_vector=None):
     x = _load_shift_vector(schaffer, x, shift_vector)
     y = continuous_functions.schaffer(x)
     return y
+
+def schwefel(x, shift_vector=None):
+    x = _load_shift_vector(schwefel, x, shift_vector)
+    y = continuous_functions.schwefel(x)
+    return y
