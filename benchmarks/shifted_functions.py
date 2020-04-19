@@ -111,3 +111,8 @@ def schwefel(x, shift_vector=None):
     x = _load_shift_vector(schwefel, x, shift_vector)
     y = continuous_functions.schwefel(x)
     return y
+
+def bohachevsky(x, shift_vector=None):
+    x = _load_shift_vector(bohachevsky, x, shift_vector)
+    y = continuous_functions.bohachevsky(x)
+    return y
