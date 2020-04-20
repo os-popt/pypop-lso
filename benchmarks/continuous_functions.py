@@ -86,6 +86,12 @@ def rastrigin(x):
     y = 10 * x.size + np.sum(np.power(x, 2) - 10 * np.cos(2 * np.pi * x))
     return y
 
+def scaled_rastrigin(x):
+    x = _transform_and_check_size(x)
+    x = (10 ** np.linspace(0, 1, num=x.size)) * x
+    y = rastrigin(x)
+    return y
+
 def schaffer(x):
     x = _transform_and_check_size(x)
     x = np.power(x, 2)
