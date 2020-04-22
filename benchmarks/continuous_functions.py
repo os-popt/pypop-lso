@@ -92,6 +92,12 @@ def scaled_rastrigin(x):
     y = rastrigin(x)
     return y
 
+def skew_rastrigin(x):
+    x = _transform_and_check(x)
+    x[x > 0] = 10 * x[x > 0]
+    y = rastrigin(x)
+    return y
+
 def schaffer(x):
     x = _transform_and_check_size(x)
     x = np.power(x, 2)
