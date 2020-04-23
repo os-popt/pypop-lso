@@ -107,6 +107,11 @@ def scaled_rastrigin(x, shift_vector=None):
     y = continuous_functions.scaled_rastrigin(x)
     return y
 
+def skew_rastrigin(x, shift_vector=None):
+    x = _load_shift_vector(skew_rastrigin, x, shift_vector)
+    y = continuous_functions.skew_rastrigin(x)
+    return y
+
 def schaffer(x, shift_vector=None):
     x = _load_shift_vector(schaffer, x, shift_vector)
     y = continuous_functions.schaffer(x)
