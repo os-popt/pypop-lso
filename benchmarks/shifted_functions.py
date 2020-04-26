@@ -4,7 +4,7 @@ import continuous_functions
 from continuous_functions import _transform_and_check
 
 
-# helper function
+# helper functions
 def _load_shift_vector(func, x, shift_vector=None):
     x = _transform_and_check(x)
     if shift_vector is None:
@@ -46,6 +46,8 @@ def generate_shift_vector(func, n_dim, low, high):
     np.savetxt(data_path, shift_vector)
     return shift_vector
 
+
+# unimodal functions
 def sphere(x, shift_vector=None):
     x = _load_shift_vector(sphere, x, shift_vector)
     y = continuous_functions.sphere(x)
@@ -59,6 +61,11 @@ def cigar(x, shift_vector=None):
 def discus(x, shift_vector=None):
     x = _load_shift_vector(discus, x, shift_vector)
     y = continuous_functions.discus(x)
+    return y
+
+def cigar_discus(x, shift_vector=None):
+    x = _load_shift_vector(cigar_discus, x, shift_vector)
+    y = continuous_functions.cigar_discus(x)
     return y
 
 def ellipsoid(x, shift_vector=None):
