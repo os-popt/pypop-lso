@@ -44,6 +44,20 @@ def generate_rotation_matrix(func, n_dim):
     return rotation_matrix
 
 
+def check_rotation_matrix(x, error=1e-6):
+    x = np.mat(x)
+    if x.shape[0] != x.shape[1]:
+        raise TypeError("the input 'x' should be a square matrix.")
+    conditionA = (np.abs(np.matmul(x, x.transpose()) - np.eye(x.shape[0])) < error)
+    conditionB = (np.abs(np.matmul(x.transpose(), x) - np.eye(x.shape[0])) < error)
+    conditionC = (np.abs(np.sum(np.power(x, 2), 0) - 1) < error)
+    conditionD = (np.abs(np.sum(np.power(x, 2), 1) - 1) < error)
+    conditionE = (np.linalg.matrix_rank(x) == x.shape[0])
+    return (np.all(conditionA) and np.all(conditionB) and
+        np.all(conditionC) and np.all(conditionD) and
+        conditionE)
+
+
 # unimodal functions
 def sphere(x, rotation_matrix=None):
     x = _load_rotation_matrix(sphere, x, rotation_matrix)
