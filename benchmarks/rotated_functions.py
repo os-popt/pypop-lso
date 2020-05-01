@@ -101,7 +101,7 @@ def schwefel12(x, rotation_matrix=None):
 
 def rosenbrock(x, rotation_matrix=None):
     x = _load_rotation_matrix(rosenbrock, x, rotation_matrix)
-    y = continuous_functions.rosenbrock(x + 1)
+    y = continuous_functions.rosenbrock(x)
     return y
 
 # multi-modal functions
