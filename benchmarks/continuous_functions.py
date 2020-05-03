@@ -42,8 +42,13 @@ def cigar_discus(x):
 
 def ellipsoid(x):
     x = _transform_and_check(x, True)
-    weights = np.power(10, 6 * np.linspace(0, 1, num=x.size))
+    weights = np.power(10, 6 * np.linspace(0, 1, x.size))
     y = np.dot(weights, np.power(x, 2))
+    return y
+
+def different_powers(x):
+    x = _transform_and_check(x, True)
+    y = np.sum(np.power(np.abs(x), 2 + 4 * np.linspace(0, 1, x.size)))
     return y
 
 def parabolic_ridge(x):
@@ -89,7 +94,7 @@ def rastrigin(x):
 
 def scaled_rastrigin(x):
     x = _transform_and_check(x, True)
-    x = (10 ** np.linspace(0, 1, num=x.size)) * x
+    x = (10 ** np.linspace(0, 1, x.size)) * x
     y = rastrigin(x)
     return y
 
