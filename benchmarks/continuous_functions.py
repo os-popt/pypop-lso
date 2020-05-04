@@ -67,6 +67,11 @@ def schwefel12(x):
     y = np.sum(np.power(x, 2))
     return y
 
+def schwefel221(x):
+    x = _transform_and_check(x)
+    y = np.max(np.abs(x))
+    return y
+
 def rosenbrock(x):
     x = _transform_and_check(x, True)
     y = 100 * np.sum(np.power(x[1:] - np.power(x[:-1], 2), 2)) + \
