@@ -35,7 +35,7 @@ def generate_shift_vector(func, n_dim, low, high):
         raise TypeError("low'size should equal n_dim.")
     if high.size != n_dim:
         raise TypeError("high'size should equal n_dim.")
-    if hasattr(func, '__call__'):
+    if hasattr(func, "__call__"):
         func = func.__name__
     data_folder = "po_input_data"
     if not os.path.exists(data_folder):
@@ -71,6 +71,11 @@ def cigar_discus(x, shift_vector=None):
 def ellipsoid(x, shift_vector=None):
     x = _load_shift_vector(ellipsoid, x, shift_vector)
     y = continuous_functions.ellipsoid(x)
+    return y
+
+def different_powers(x, shift_vector=None):
+    x = _load_shift_vector(different_powers, x, shift_vector)
+    y = continuous_functions.different_powers(x)
     return y
 
 def parabolic_ridge(x, shift_vector=None):
