@@ -93,6 +93,11 @@ def schwefel12(x, shift_vector=None):
     y = continuous_functions.schwefel12(x)
     return y
 
+def schwefel221(x, shift_vector=None):
+    x = _load_shift_vector(schwefel221, x, shift_vector)
+    y = continuous_functions.schwefel221(x)
+    return y
+
 def rosenbrock(x, shift_vector=None):
     x = _load_shift_vector(rosenbrock, x, shift_vector)
     y = continuous_functions.rosenbrock(x + 1)
