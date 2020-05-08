@@ -104,6 +104,11 @@ def schwefel12(x, rotation_matrix=None):
     y = continuous_functions.schwefel12(x)
     return y
 
+def schwefel221(x, rotation_matrix=None):
+    x = _load_rotation_matrix(schwefel221, x, rotation_matrix)
+    y = continuous_functions.schwefel221(x)
+    return y
+
 def rosenbrock(x, rotation_matrix=None):
     x = _load_rotation_matrix(rosenbrock, x, rotation_matrix)
     y = continuous_functions.rosenbrock(x)
