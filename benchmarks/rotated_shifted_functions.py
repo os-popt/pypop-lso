@@ -44,6 +44,11 @@ def ellipsoid(x):
     y = continuous_functions.ellipsoid(x)
     return y
 
+def different_powers(x):
+    x = _load_rotation_and_shift(different_powers, x)
+    y = continuous_functions.different_powers(x)
+    return y
+
 def parabolic_ridge(x):
     x = _load_rotation_and_shift(parabolic_ridge, x)
     y = continuous_functions.parabolic_ridge(x)
