@@ -64,6 +64,11 @@ def schwefel12(x):
     y = continuous_functions.schwefel12(x)
     return y
 
+def schwefel221(x):
+    x = _load_rotation_and_shift(schwefel221, x)
+    y = continuous_functions.schwefel221(x)
+    return y
+
 def rosenbrock(x):
     x = _load_rotation_and_shift(rosenbrock, np.array(x) + 1)
     y = continuous_functions.rosenbrock(x)
