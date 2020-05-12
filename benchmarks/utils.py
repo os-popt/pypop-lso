@@ -22,5 +22,7 @@ def plot_contour(func, x, y, levels=None):
         plt.clabel(cs, inline=True, fontsize=12, colors='white')
 
     plt.title(func.__name__)
+    plt.xlabel("x")
+    plt.ylabel("y")
     plt.savefig(func.__name__ + ".png")
     plt.show()
