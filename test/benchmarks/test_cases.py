@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class TestCases(object):
     def load(n_dim):
         if n_dim == 1:
@@ -53,4 +56,18 @@ class TestCases(object):
                 [0, 1, 2, 3, 4, 5, 6]]
         else:
             raise TypeError("n_dim should >=1 and <= 7.")
-        return X
+        return np.array(X)
+
+
+class BenchmarkTest(object):
+    def check_via_sampling(func, y, rtol=1e-09, atol=1e-09, start_from=1, end_with=7):
+        is_pass = True
+        for d in range(start_from, end_with + 1):
+            X = TestCases.load(d)
+            for s in range(X.shape[0]):
+                is_pass = np.allclose(func(X[s, :]), y[d][s], rtol, atol)
+                if not(is_pass):
+                    break
+            if not(is_pass):
+                break
+        return is_pass, d, s
