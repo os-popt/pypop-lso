@@ -61,13 +61,29 @@ class TestCases(object):
 
 class BenchmarkTest(object):
     def check_via_sampling(func, y, rtol=1e-09, atol=1e-09, start_from=1, end_with=7):
-        is_pass = True
+        is_pass, message = True, " "
         for d in range(start_from, end_with + 1):
             X = TestCases.load(d)
             for s in range(X.shape[0]):
-                is_pass = np.allclose(func(X[s, :]), y[d][s], rtol, atol)
+                is_pass = np.allclose(func(X[s, :]), y[d - 1][s], rtol, atol)
                 if not(is_pass):
+                    message = " NOT "
                     break
             if not(is_pass):
                 break
+        message = "'{}' has{}passed the check via sampling.".format(func.__name__, message)
+        print(message)
         return is_pass, d, s
+
+    def check_origin(func, y=0, rtol=1e-09, atol=1e-09,
+        start_from=1, end_with=10000, n_samples=10000):
+        is_pass, message = True, " "
+        for s in range(n_samples):
+            x = np.zeros(np.random.randint(start_from, end_with + 1))
+            is_pass = np.allclose(func(x), y, rtol, atol)
+            if not(is_pass):
+                message = " NOT "
+                break
+        message = "'{}' has{}passed the origin check.".format(func.__name__, message)
+        print(message)
+        return is_pass
