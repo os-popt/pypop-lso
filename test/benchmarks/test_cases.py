@@ -62,8 +62,7 @@ class TestCases(object):
 
 def _search_tolerance(y1, y2, atols=None):
     if atols is None:
-        atols = [10 ** i for i in range(-9, 2)]
-    is_pass = False
+        atols = [(10 ** i) for i in range(-9, 2)]
     for atol in atols:
         is_pass = np.allclose(y1, y2, rtol=0, atol=atol)
         if is_pass:
@@ -76,13 +75,14 @@ class BenchmarkTest(object):
         start_time = time.time()
         print("check '{}' via sampling ->".format(func.__name__))
         for d in range(start_from, end_with + 1):
-            message = " "
             X = TestCases.load(d)
             for s in range(X.shape[0]):
                 is_pass, atol = _search_tolerance(func(X[s, :]), y[d - start_from][s])
                 if not(is_pass):
                     message = " NOT "
                     break
+            else:
+                message = " "
             print("    -> can{}pass the {}-dimensional check with tolerance {:.2e}".format(
                 message, d, atol))
         end_time = time.time()
@@ -90,13 +90,14 @@ class BenchmarkTest(object):
 
     def check_origin(func, y=0, atols=[1e-9], start_from=1, end_with=10000, n_samples=10000):
         start_time = time.time()
-        is_pass, message = True, " "
         for s in range(n_samples):
             x = np.zeros(np.random.randint(start_from, end_with + 1))
             is_pass, atol = _search_tolerance(func(x), y, atols)
             if not(is_pass):
                 message = " NOT "
                 break
+        else:
+            message = " "
         end_time = time.time()
         print("'{}' has{}passed the origin check with tolerance {:.2e}: take {:.2f} seconds.".format(
             func.__name__, message, atol, end_time - start_time))
