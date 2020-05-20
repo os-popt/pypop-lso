@@ -56,3 +56,15 @@ y = [[4000004, 1000001, 0, 1000001, 4000004],
 BenchmarkTest.check_via_sampling(ellipsoid, y, start_from=2)
 BenchmarkTest.check_origin(ellipsoid, start_from=2)
 print("")
+
+# schwefel221
+y = [[2, 1, 0, 1, 2],
+    [2, 1, 0, 1, 2],
+    [2, 1, 0, 1, 2],
+    [0, 1, 1, 1, 4, 4, 4],
+    [0, 1, 1, 1, 5, 5, 5],
+    [0, 1, 1, 1, 6, 6, 6],
+    [0, 1, 1, 1, 7, 7, 7, 6]]
+BenchmarkTest.check_via_sampling(schwefel221, y)
+BenchmarkTest.check_origin(schwefel221)
+print("")
