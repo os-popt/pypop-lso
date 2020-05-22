@@ -65,7 +65,7 @@ y = [[4, 1, 0, 5, 20],
     [0, 91, 91, 7, 812, 28, 195],
     [0, 140, 140, 8, 1596, 44, 564, 812]]
 BenchmarkTest.check_via_sampling(schwefel12, y, start_from=2)
-BenchmarkTest.check_origin(schwefel12, start_from=2)
+# BenchmarkTest.check_origin(schwefel12, start_from=2) # time-consuming
 print("")
 
 # schwefel221
@@ -78,4 +78,15 @@ y = [[2, 1, 0, 1, 2],
     [0, 1, 1, 1, 7, 7, 7, 6]]
 BenchmarkTest.check_via_sampling(schwefel221, y)
 BenchmarkTest.check_origin(schwefel221)
+print("")
+
+# ackley
+y = [[6.593599, 3.625384, 0, 3.625384, 6.593599],
+    [6.593599, 3.625384, 0, 3.625384, 6.593599],
+    [0, 3.625384, 3.625384, 3.625384, 8.434694, 8.434694, 8.434694],
+    [0, 3.625384, 3.625384, 3.625384, 9.697286, 9.697286, 9.697286],
+    [0, 3.625384, 3.625384, 3.625384, 10.821680, 10.821680, 10.821680],
+    [0, 3.625384, 3.625384, 3.625384, 11.823165, 11.823165, 11.823165, 10.275757]]
+BenchmarkTest.check_via_sampling(ackley, y, start_from=2)
+BenchmarkTest.check_origin(ackley, start_from=2)
 print("")
