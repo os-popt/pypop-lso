@@ -80,6 +80,16 @@ BenchmarkTest.check_via_sampling(schwefel221, y)
 BenchmarkTest.check_origin(schwefel221)
 print("")
 
+# rosenbrock
+y = [[409, 4, 1, 0, 401],
+    [810, 4, 2, 400, 4002],
+    [3, 0, 1212, 804, 2705, 17913, 24330],
+    [4, 0, 1616, 808, 14814, 30038, 68450],
+    [5, 0, 2020, 808, 50930, 126154, 164579],
+    [6, 0, 2424, 1208, 135055, 210303, 349519, 51031]]
+BenchmarkTest.check_via_sampling(rosenbrock, y, start_from=2)
+print("")
+
 # griewank
 y = [[1.066895, 0.589738, 0, 0.589738, 1.066895],
     [1.029230, 0.656567, 0, 0.656567, 1.029230],
