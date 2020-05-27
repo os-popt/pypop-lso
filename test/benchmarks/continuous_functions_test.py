@@ -68,6 +68,17 @@ BenchmarkTest.check_via_sampling(different_powers, y, start_from=2)
 BenchmarkTest.check_origin(different_powers, start_from=2)
 print("")
 
+# parabolic_ridge
+y = [[402, 101, 0, 99, 398],
+    [802, 201, 0, 199, 798],
+    [0, 299, 301, 299, 2899, 2899, 1404],
+    [0, 399, 401, 399, 5399, 5399, 3005],
+    [0, 499, 501, 499, 8999, 8999, 5506],
+    [0, 599, 601, 599, 13899, 13899, 9107, 9100]]
+BenchmarkTest.check_via_sampling(parabolic_ridge, y, start_from=2)
+BenchmarkTest.check_origin(parabolic_ridge, start_from=2)
+print("")
+
 # schwefel12
 y = [[4, 1, 0, 5, 20],
     [8, 2, 0, 6, 24],
