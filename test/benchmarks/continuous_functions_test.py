@@ -155,3 +155,14 @@ y = [[8, 2, 0, 2, 8],
 BenchmarkTest.check_via_sampling(rastrigin, y, start_from=2)
 BenchmarkTest.check_origin(rastrigin, start_from=2)
 print("")
+
+# scaled_rastrigin
+y = [[404, 101, 0, 101, 404],
+    [458.5150, 115.7631, 0, 115.7631, 458.5150],
+    [0, 147.8328, 147.8328, 147.8328, 1828.1772, 1828.1772, 275.7566],
+    [0, 175.92186, 175.9219, 175.9219, 3168.9466, 3168.9466, 424.2752],
+    [0, 217.7910, 217.7910, 217.7910, 4962.2668, 4962.2668, 621.1378],
+    [0, 237.1110, 237.1110, 237.1110, 7367.6445, 7367.6445, 931.3332, 5289.1605]]
+BenchmarkTest.check_via_sampling(scaled_rastrigin, y, start_from=2)
+BenchmarkTest.check_origin(scaled_rastrigin, start_from=2)
+print("")
