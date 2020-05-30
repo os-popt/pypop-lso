@@ -166,3 +166,14 @@ y = [[404, 101, 0, 101, 404],
 BenchmarkTest.check_via_sampling(scaled_rastrigin, y, start_from=2)
 BenchmarkTest.check_origin(scaled_rastrigin, start_from=2)
 print("")
+
+# skew_rastrigin
+y = [[404, 101, 0, 200, 800],
+    [804, 201, 0, 201, 804],
+    [0, 400, 4, 202, 3000, 1020, 1317],
+    [0, 500, 5, 302, 5500, 3520, 2926],
+    [0, 600, 6, 402, 9100, 3556, 5437],
+    [0, 700, 7, 403, 14000, 8456, 9050, 9100]]
+BenchmarkTest.check_via_sampling(skew_rastrigin, y, start_from=2)
+BenchmarkTest.check_origin(skew_rastrigin, start_from=2)
+print("")
