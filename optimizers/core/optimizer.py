@@ -23,8 +23,14 @@ class Optimizer(object):
         self.max_runtime = options.get("max_runtime", np.inf)
         self.threshold_fitness = options.get("threshold_fitness", -np.inf)
         self.seed = options.get("seed")
+        if self.seed is None:
+            self.rng = np.random.default_rng()
+        else:
+            self.rng = np.random.default_rng(self.seed)
         self.initial_guess = options.get("initial_guess")
         self.seed_initial_guess = options.get("seed_initial_guess")
+        if self.seed_initial_guess is None:
+            self.seed_initial_guess = self.rng.integers(np.iinfo(np.int64).max)
         self.n_individuals = options.get("n_individuals", 1)
 
     def optimizer(self, fitness_function):
