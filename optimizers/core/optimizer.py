@@ -41,3 +41,12 @@ class Optimizer(object):
             "Set the field 'optimizer_name' for the dict object 'options'."
         optimizer_name = self.options.get("optimizer_name", tip)
         return optimizer_name
+
+class PopulationOptimizer(Optimizer):
+    """The base class of all population-based optimizers for continuous, black-box minimization."""
+    def __init__(self, problem, options):
+        Optimizer.__init__(self, problem, options)
+        if self.n_individuals == 1:
+            self._X_size = (self.ndim_problem,)
+        else:
+            self._X_size = (self.n_individuals, self.ndim_problem)
