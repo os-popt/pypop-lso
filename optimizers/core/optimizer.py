@@ -33,7 +33,7 @@ class Optimizer(object):
             self.seed_initial_guess = self.rng.integers(np.iinfo(np.int64).max)
         self.n_individuals = options.get("n_individuals", 1)
 
-    def optimizer(self, fitness_function):
+    def optimize(self, fitness_function):
         pass
     
     def __repr__(self):
