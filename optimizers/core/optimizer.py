@@ -50,3 +50,12 @@ class PopulationOptimizer(Optimizer):
             self._X_size = (self.ndim_problem,)
         else:
             self._X_size = (self.n_individuals, self.ndim_problem)
+        
+        # initialize population (i.e., _X)
+        if self.initial_guess is None:
+            self._X = np.random.default_rng(self.seed_initial_guess).uniform(
+                self.initial_lower_boundary,
+                self.initial_upper_boundary,
+                self._X_size)
+        else:
+            self._X = self.initial_guess
