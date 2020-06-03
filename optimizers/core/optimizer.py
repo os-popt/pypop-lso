@@ -1,3 +1,4 @@
+import math
 import numpy as np
 
 
@@ -61,3 +62,19 @@ class PopulationOptimizer(Optimizer):
                 self._X_size)
         else:
             self._X = self.initial_guess
+
+def compress_fitness_data(fitness_data, len_fitness_data=2000):
+    # converge in non-increasing order
+    fitness_data = np.array(fitness_data)
+    for index in range(len(fitness_data) - 1):
+        if fitness_data[index] < fitness_data[index + 1]:
+            fitness_data[index + 1] = fitness_data[index]
+    
+    # compress for space saving
+    frequency = math.ceil(len(fitness_data) / len_fitness_data)
+    frequency = max(100, round(frequency, -(len(str(frequency)) - 1)))
+    index = np.append(np.arange(0, len(fitness_data) - 1, frequency), len(fitness_data) - 1)
+    fitness_data = fitness_data[index]
+    index[0], index[len(index) - 1] = index[0] + 1, index[len(index) - 1] + 1 # 1-based index
+    fitness_data = np.stack((index, fitness_data), 1)
+    return fitness_data
