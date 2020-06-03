@@ -32,6 +32,8 @@ class Optimizer(object):
         if self.seed_initial_guess is None:
             self.seed_initial_guess = self.rng.integers(np.iinfo(np.int64).max)
         self.n_individuals = options.get("n_individuals", 1)
+        self.save_fitness_data = options.get("save_fitness_data", True)
+        self.len_fitness_data = options.get("len_fitness_data", 2000)
 
     def optimize(self, fitness_function):
         pass
