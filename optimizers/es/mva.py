@@ -20,7 +20,7 @@ class MainVectorAdaptation(EvolutionStrategy):
         self.w_v = options.get("w_v", 3)
         self.c_sigma = options.get("c_sigma", 4 / (self.ndim_problem + 4))
         self.chi_N = options.get("chi_N", np.sqrt(self.ndim_problem - 0.5))
-        self.d_sigma = options.get("d_sigma", self.ndim_problem)
+        self.d_sigma = options.get("d_sigma", 1)
         self.c_m = options.get("c_m", 4 / (self.ndim_problem + 4))
         self.c_v = options.get("c_v", 2 / ((self.ndim_problem + np.sqrt(2)) ** 2))
         self.n_parents = options.get("n_parents", math.floor(self.n_individuals / 2))
