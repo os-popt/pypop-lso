@@ -89,9 +89,9 @@ class MainVectorAdaptation(EvolutionStrategy):
                     break
             
             # check four termination criteria
+            runtime = time.time() - start_optimization
             if n_evaluations >= self.max_evaluations:
                 break
-            runtime = time.time() - start_optimization
             if runtime >= self.max_runtime:
                 termination = "max_runtime"
                 break
