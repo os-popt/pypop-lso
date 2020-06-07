@@ -27,7 +27,8 @@ def _fitness_function(weights, env, ndim_actions, episode_length):
 class ContinuousControl(object):
     def __init__(self, optimizer,
         env_names=None, env_seed=2020, episode_length=1000, lower_boundary=-100, upper_boundary=100,
-        optimizer_seed=None, options={}, seed_initial_guess=20200607):
+        optimizer_seed=None, options={}, seed_initial_guess=20200607,
+        suffix_txt=''):
         # problem-related (based on gym environment)
         if env_names is None:
             env_names = ["Swimmer-v1", "Hopper-v1", "HalfCheetah-v1", 
@@ -93,9 +94,22 @@ class ContinuousControl(object):
             results = solver.optimize(fitness_function)
             best_so_far_y = results["best_so_far_y"]
             print("    best_so_far_y: {:2e} (max)".format(-best_so_far_y))
-            np.savetxt("env_{}_{}_best_so_far_x.txt".format(
-                env_name, self.optimizer.__name__), results["best_so_far_x"])
-            np.savetxt("env_{}_{}_fitness_data.txt".format(
-                env_name, self.optimizer.__name__), results["fitness_data"])
+            np.savetxt("env_{}_{}_best_so_far_x{}.txt".format(
+                env_name, self.optimizer.__name__, suffix_txt), results["best_so_far_x"])
+            np.savetxt("env_{}_{}_fitness_data{}.txt".format(
+                env_name, self.optimizer.__name__, suffix_txt), results["fitness_data"])
             print("$ runtime: {:.2e}.".format(time.time() - start_time))
         print("$$$ total train time: {:.2e}.".format(time.time() - start_train))
+
+def grid_search_boundary(optimizer, boundaries=None,
+        env_names=None, env_seed=2021, episode_length=1000,
+        optimizer_seed=None, options={}, seed_initial_guess=20200608):
+    if boundaries is None:
+        boundaries = [(-(10 ** i), (10 ** i)) for i in range(-1, 4)]
+    for i, boundary in enumerate(boundaries):
+        lower_boundary, upper_boundary = boundary
+        cc = ContinuousControl(optimizer,
+            env_names, env_seed, episode_length, lower_boundary, upper_boundary,
+            optimizer_seed, options, seed_initial_guess,
+            "___gsb_{}".format(i))
+        cc.train()
