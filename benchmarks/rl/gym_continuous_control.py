@@ -56,6 +56,7 @@ class ContinuousControl(object):
         self.seed_initial_guess = rng.integers(
             0, np.iinfo(np.int32).max, (len(self.env_names),))
         self.max_runtime = 3600 * np.array([2, 2, 3, 3, 3, 4]) # seconds
+        self.suffix_txt = suffix_txt
     
     def train(self):
         start_train = time.time()
@@ -95,9 +96,9 @@ class ContinuousControl(object):
             best_so_far_y = results["best_so_far_y"]
             print("    best_so_far_y: {:2e} (max)".format(-best_so_far_y))
             np.savetxt("env_{}_{}_best_so_far_x{}.txt".format(
-                env_name, self.optimizer.__name__, suffix_txt), results["best_so_far_x"])
+                env_name, self.optimizer.__name__, self.suffix_txt), results["best_so_far_x"])
             np.savetxt("env_{}_{}_fitness_data{}.txt".format(
-                env_name, self.optimizer.__name__, suffix_txt), results["fitness_data"])
+                env_name, self.optimizer.__name__, self.suffix_txt), results["fitness_data"])
             print("$ runtime: {:.2e}.".format(time.time() - start_time))
         print("$$$ total train time: {:.2e}.".format(time.time() - start_train))
 
