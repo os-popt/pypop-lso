@@ -3,6 +3,7 @@ from datetime import datetime
 import copy
 import numpy as np
 import gym
+from pyvirtualdisplay import Display
 
 
 def _linear_policy(observation, ndim_actions, weights):
@@ -28,7 +29,7 @@ class ContinuousControl(object):
     def __init__(self, optimizer,
         env_names=None, env_seed=2020, episode_length=1000, lower_boundary=-100, upper_boundary=100,
         optimizer_seed=None, options={}, seed_initial_guess=20200607,
-        suffix_txt=''):
+        suffix_txt='', n_test=100):
         # problem-related (based on gym environment)
         if env_names is None:
             env_names = ["Swimmer-v1", "Hopper-v1", "HalfCheetah-v1", 
@@ -57,6 +58,9 @@ class ContinuousControl(object):
             0, np.iinfo(np.int32).max, (len(self.env_names),))
         self.max_runtime = 3600 * np.array([2, 2, 3, 3, 3, 4]) # seconds
         self.suffix_txt = suffix_txt
+
+        # test-related
+        self.n_test = n_test
     
     def train(self):
         start_train = time.time()
@@ -101,6 +105,50 @@ class ContinuousControl(object):
                 env_name, self.optimizer.__name__, self.suffix_txt), results["fitness_data"])
             print("$ runtime: {:.2e}.".format(time.time() - start_time))
         print("$$$ total train time: {:.2e}.".format(time.time() - start_train))
+
+    def test(self):
+        start_test = time.time()
+        rewards = np.empty((len(self.env_names), self.n_test))
+        for i, env_name in enumerate(self.env_names):
+            start_time = time.time()
+            rng = np.random.default_rng(self.env_seed_for_test[i])
+            env_seed_pool = rng.integers(0, np.iinfo(np.int32).max, (self.n_test,))
+            for j in range(self.n_test):
+                # set parameters of problem
+                env = gym.make(env_name)
+                ndim_observation = env.observation_space.shape[0]
+                ndim_actions = env.action_space.shape[0]
+                ndim_problem = ndim_observation * ndim_actions
+                problem = {"ndim_problem": ndim_problem,
+                    "lower_boundary": self.lower_boundary * np.ones((ndim_problem,)),
+                    "upper_boundary": self.upper_boundary * np.ones((ndim_problem,))}
+                if j == 0:
+                    print("** test {}-d problem: {}".format(ndim_problem, env_name))
+                elif j == (self.n_test - 1):
+                    virtual_display = Display()
+                    virtual_display.start()
+                    env = gym.wrappers.Monitor(env, "./test_video/env_{}_{}/".format(
+                        env_name, self.optimizer.__name__), force=True)
+                env_seed_for_test = env_seed_pool[j]
+                episode_length = self.episode_length
+                weights = np.loadtxt("env_{}_{}_best_so_far_x{}.txt".format(
+                    env_name, self.optimizer.__name__, self.suffix_txt))
+                
+                def fitness_function(weights):
+                    if not hasattr(fitness_function, "env_rng"):
+                        fitness_function.env_rng = np.random.default_rng(env_seed_for_test)
+                    env.seed(int(fitness_function.env_rng.integers(0, np.iinfo(np.int32).max)))
+                    return _fitness_function(weights, env, ndim_actions, episode_length)
+                
+                rewards[i, j] = -1 * fitness_function(weights) # max
+                print("    {}: reward {:.2f}".format(j + 1, rewards[i, j]))
+            np.savetxt("env_{}_{}_rewards.txt".format(
+                env_name, self.optimizer.__name__), rewards[i, :])
+            print("  $ env {}: rewards # max {:.2e} # mean {:.2e} # min {:.2e} >$> runtime: {:.2e}.".format(
+                env_name, np.max(rewards[i, :]), np.mean(rewards[i, :]),
+                np.min(rewards[i, :]), time.time() - start_time))
+        print("$$$ total test time: {:.2e}.".format(time.time() - start_test))
+        return rewards
 
 def grid_search_boundary(optimizer, boundaries=None,
         env_names=None, env_seed=2021, episode_length=1000,
