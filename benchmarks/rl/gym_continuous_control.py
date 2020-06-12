@@ -127,8 +127,8 @@ class ContinuousControl(object):
                 elif j == (self.n_test - 1):
                     virtual_display = Display()
                     virtual_display.start()
-                    env = gym.wrappers.Monitor(env, "./test_video/env_{}_{}/".format(
-                        env_name, self.optimizer.__name__), force=True)
+                    env = gym.wrappers.Monitor(env, "./test_video/env_{}_{}_{}/".format(
+                        env_name, self.optimizer.__name__, self.suffix_txt), force=True)
                 env_seed_for_test = env_seed_pool[j]
                 episode_length = self.episode_length
                 weights = np.loadtxt("env_{}_{}_best_so_far_x{}.txt".format(
@@ -152,7 +152,8 @@ class ContinuousControl(object):
 
 def grid_search_boundary(optimizer, boundaries=None,
         env_names=None, env_seed=2021, episode_length=1000,
-        optimizer_seed=None, options={}, seed_initial_guess=20200608):
+        optimizer_seed=None, options={}, seed_initial_guess=20200608,
+        is_test=False):
     if boundaries is None:
         boundaries = [(-(10 ** i), (10 ** i)) for i in range(-1, 4)]
     for i, boundary in enumerate(boundaries):
@@ -161,4 +162,7 @@ def grid_search_boundary(optimizer, boundaries=None,
             env_names, env_seed, episode_length, lower_boundary, upper_boundary,
             optimizer_seed, options, seed_initial_guess,
             "___gsb_{}".format(i))
-        cc.train()
+        if not is_test:
+            cc.train()
+        else:
+            cc.test()
