@@ -142,8 +142,8 @@ class ContinuousControl(object):
                 
                 rewards[i, j] = -1 * fitness_function(weights) # max
                 print("    {}: reward {:.2f}".format(j + 1, rewards[i, j]))
-            np.savetxt("env_{}_{}_rewards.txt".format(
-                env_name, self.optimizer.__name__), rewards[i, :])
+            np.savetxt("env_{}_{}_rewards{}.txt".format(
+                env_name, self.optimizer.__name__, self.suffix_txt), rewards[i, :])
             print("  $ env {}: rewards # max {:.2e} # mean {:.2e} # min {:.2e} >$> runtime: {:.2e}.".format(
                 env_name, np.max(rewards[i, :]), np.mean(rewards[i, :]),
                 np.min(rewards[i, :]), time.time() - start_time))
@@ -158,6 +158,7 @@ def grid_search_boundary(optimizer, boundaries=None,
         boundaries = [(-(10 ** i), (10 ** i)) for i in range(-1, 4)]
     for i, boundary in enumerate(boundaries):
         lower_boundary, upper_boundary = boundary
+        options = {"step_size": 0.3 * (upper_boundary - lower_boundary)}
         cc = ContinuousControl(optimizer,
             env_names, env_seed, episode_length, lower_boundary, upper_boundary,
             optimizer_seed, options, seed_initial_guess,
