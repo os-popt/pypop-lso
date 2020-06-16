@@ -158,7 +158,7 @@ def grid_search_boundary(optimizer, boundaries=None,
         boundaries = [(-(10 ** i), (10 ** i)) for i in range(-1, 4)]
     for i, boundary in enumerate(boundaries):
         lower_boundary, upper_boundary = boundary
-        options = {"step_size": 0.3 * (upper_boundary - lower_boundary)}
+        options.setdefault("step_size", 0.3 * (upper_boundary - lower_boundary))
         cc = ContinuousControl(optimizer,
             env_names, env_seed, episode_length, lower_boundary, upper_boundary,
             optimizer_seed, options, seed_initial_guess,
