@@ -10,19 +10,19 @@ class MainVectorAdaptation(EvolutionStrategy):
     """Main Vector Adaptation Evolution Strategy (MVA-ES) for large-scale, black-box optimization."""
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "MainVectorAdaptation (MVA-ES)")
-        default_n_individuals = 4 + math.floor(3 * np.log(problem["ndim_problem"]))
-        n_individuals = options.setdefault("n_individuals", default_n_individuals)
-        if n_individuals < 4:
-            options["n_individuals"] = default_n_individuals
-            print("For MainVectorAdaptation, the option 'n_individuals' should >= 4, " +\
-                "and it has been reset to {:d} (a commonly suggested value).".format(default_n_individuals))
         EvolutionStrategy.__init__(self, problem, options)
+        ndim_problem = problem["ndim_problem"]
+        if self.n_individuals < 4:
+            self.n_individuals = int(4 + numpy.floor(3 * np.log(ndim_problem)))
+            print("For MainVectorAdaptation, the option 'n_individuals' should >= 4, " +\
+                "and it has been reset to {:d} " +
+                "(a commonly suggested value).".format(self.n_individuals))
         self.w_v = options.get("w_v", 3)
-        self.c_sigma = options.get("c_sigma", 4 / (self.ndim_problem + 4))
-        self.chi_N = options.get("chi_N", np.sqrt(self.ndim_problem - 0.5))
+        self.c_sigma = options.get("c_sigma", 4 / (ndim_problem + 4))
+        self.chi_N = options.get("chi_N", np.sqrt(ndim_problem - 0.5))
         self.d_sigma = options.get("d_sigma", 1)
-        self.c_m = options.get("c_m", 4 / (self.ndim_problem + 4))
-        self.c_v = options.get("c_v", 2 / ((self.ndim_problem + np.sqrt(2)) ** 2))
+        self.c_m = options.get("c_m", 4 / (ndim_problem + 4))
+        self.c_v = options.get("c_v", 2 / ((ndim_problem + np.sqrt(2)) ** 2))
         self.n_parents = options.get("n_parents", math.floor(self.n_individuals / 2))
         self.threshold_step_size = options.get("threshold_step_size", 1e-15)
     
@@ -34,9 +34,10 @@ class MainVectorAdaptation(EvolutionStrategy):
         
         # initialize
         if self._X.ndim == 1:
-            x_mean = self._X
+            x_mean = np.copy(self._X)
         else:
             x_mean = np.copy(self._X[0, :]) # discard all other individuals
+        self._X = None # clear
         start_evaluation = time.time()
         y = fitness_function(x_mean)
         time_evaluations = time.time() - start_evaluation
@@ -99,7 +100,10 @@ class MainVectorAdaptation(EvolutionStrategy):
                 termination = "threshold_fitness"
                 break
             if sigma <= self.threshold_step_size:
-                termination = "threshold_step_size"
+                termination = "threshold_step_size (lower)"
+                break
+            if sigma >= 3 * np.min(self.upper_boundary - self.lower_boundary):
+                termination = "threshold_step_size (upper)"
                 break
             
             # update x_mean
@@ -134,7 +138,7 @@ class MainVectorAdaptation(EvolutionStrategy):
             "termination": termination,
             "time_evaluations": time_evaluations,
             "time_compression": time_compression,
-            "x_mean": np.copy(x_mean),
+            "x_mean": x_mean,
+            "v": v,
             "step_size": sigma}
-        self._X = None # clear
         return results
