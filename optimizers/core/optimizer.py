@@ -70,7 +70,7 @@ def compress_fitness_data(fitness_data, len_fitness_data=2000):
             fitness_data[index + 1] = fitness_data[index]
     
     # compress for space saving
-    frequency = np.ceil(len(fitness_data) / len_fitness_data)
+    frequency = int(np.ceil(len(fitness_data) / len_fitness_data))
     frequency = max(100, round(frequency, -(len(str(frequency)) - 1)))
     index = np.append(np.arange(0, len(fitness_data) - 1, frequency), len(fitness_data) - 1)
     fitness_data = fitness_data[index]
