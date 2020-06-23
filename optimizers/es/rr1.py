@@ -2,21 +2,16 @@ import time
 import numpy as np
 
 from optimizer import compress_fitness_data
-from es import EvolutionStrategy
+from es import MuCommaLambda
 
 
-class RestartRankOne(EvolutionStrategy):
+class RestartRankOne(MuCommaLambda):
     """Restart-based Rank-One Evolution Strategy (R-R1-ES) for large-scale, black-box optimization."""
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "RestartRankOne (R-R1-ES)")
-        EvolutionStrategy.__init__(self, problem, options)
+        MuCommaLambda.__init__(self, problem, options)
         self.threshold_step_size = 1e-10
         ndim_problem = problem["ndim_problem"]
-        if self.n_individuals < 4:
-            self.n_individuals = int(4 + numpy.floor(3 * np.log(ndim_problem)))
-            print("For RestartRankOne, the option 'n_individuals' should >= 4, " +\
-                "and it has been reset to {:d} " +
-                "(a commonly suggested value).".format(self.n_individuals))
         self.c_cov = 1 / (3 * np.sqrt(ndim_problem) + 5)
         self.c_c = 2 / (ndim_problem + 7)
         self.q_star = 0.3
@@ -41,10 +36,11 @@ class RestartRankOne(EvolutionStrategy):
         n_evaluations = 1
         best_so_far_x = np.copy(m)
         best_so_far_y = np.copy(y)
+        Y = np.tile(y, (self.n_individuals,)) # fitness of population
         
         if self.save_fitness_data:
             fitness_data = [y]
-                
+        
         # iterate
         termination = "max_evaluations"
         m_c1 = np.sqrt(1 - self.c_cov)
@@ -57,9 +53,28 @@ class RestartRankOne(EvolutionStrategy):
         while n_evaluations < self.max_evaluations:
             if is_restart:
                 if n_restart > 0:
+                    m = self.rng.uniform(self.lower_boundary,
+                        self.upper_boundary, (self.ndim_problem,))
+                    start_evaluation = time.time()
+                    y = fitness_function(m)
+                    time_evaluations += (time.time() - start_evaluation)
+                    n_evaluations += 1
+                    if best_so_far_y > y:
+                        best_so_far_x = np.copy(m)
+                        best_so_far_y = np.copy(y)
+        
+                    if self.save_fitness_data:
+                        fitness_data.append(np.copy(y))
+
                     self.n_individuals = self.n_individuals * 2
                     self.n_parents = int(np.floor(self.n_individuals / 2))
                     self.d_sigma = self.d_sigma * 2
+
+                    p = np.zeros((self.ndim_problem,))
+                    s = 0
+                    sigma = self.step_size
+
+                    Y = np.tile(y, (self.n_individuals,))
                 
                 # set weights for parents
                 w = np.log(np.arange(1, self.n_parents + 1))
@@ -70,7 +85,6 @@ class RestartRankOne(EvolutionStrategy):
                 
                 RR = np.arange(1, self.n_parents * 2 + 1) # ranks
                 p_c2 = np.sqrt(self.c_c * (2 - self.c_c) * mu_eff)
-                Y = np.tile(best_so_far_y, (self.n_individuals,)) # fitness of population
 
                 is_restart = False
             
@@ -154,6 +168,7 @@ class RestartRankOne(EvolutionStrategy):
             "p": p,
             "step_size": sigma,
             "n_individuals": self.n_individuals,
+            "n_parents": self.n_parents,
             "d_sigma": self.d_sigma,
             "n_restart": n_restart}
         return results
