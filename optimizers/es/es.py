@@ -16,3 +16,17 @@ class EvolutionStrategy(PopulationOptimizer):
             4 + np.floor(3 * np.log(problem["ndim_problem"]))))
         # mu -> n_parents
         self.n_parents = int(options.get("n_parents", np.floor(self.n_individuals / 2)))
+
+class MuCommaLambda(EvolutionStrategy):
+    def __init__(self, problem, options):
+        EvolutionStrategy.__init__(self, problem, options)
+        if self.n_individuals < 4:
+            self.n_individuals = int(4 + np.floor(3 * np.log(problem["ndim_problem"])))
+            print("the option 'n_individuals' should >= 4, " +\
+                "and it has been reset to {:d} " +
+                "(a commonly suggested value).".format(self.n_individuals))
+        if self.n_parents < 1:
+            self.n_parents = 1
+            print("the option 'n_parents' should >= 1, and it has been reset to 1.")
+        if self.n_parents > self.n_individuals:
+            raise ValueError("the option 'n_parents' should <= the option 'n_individuals'.")
