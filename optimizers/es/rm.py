@@ -2,20 +2,15 @@ import time
 import numpy as np
 
 from optimizer import compress_fitness_data
-from es import EvolutionStrategy
+from es import MuCommaLambda
 
 
-class Rm(EvolutionStrategy):
+class Rm(MuCommaLambda):
     """Rm Evolution Strategy (Rm-ES) for large-scale, black-box optimization."""
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "Rm (Rm-ES)")
-        EvolutionStrategy.__init__(self, problem, options)
+        MuCommaLambda.__init__(self, problem, options)
         ndim_problem = problem["ndim_problem"]
-        if self.n_individuals < 4:
-            self.n_individuals = int(4 + numpy.floor(3 * np.log(ndim_problem)))
-            print("For Rm, the option 'n_individuals' should >= 4, " +\
-                "and it has been reset to {:d} " +
-                "(a commonly suggested value).".format(self.n_individuals))
         self.c_cov = 1 / (3 * np.sqrt(ndim_problem) + 5)
         self.c_c = 2 / (ndim_problem + 7)
         self.q_star = 0.3

@@ -3,20 +3,15 @@ import math
 import numpy as np
 
 from optimizer import compress_fitness_data
-from es import EvolutionStrategy
+from es import MuCommaLambda
 
 
-class MainVectorAdaptation(EvolutionStrategy):
+class MainVectorAdaptation(MuCommaLambda):
     """Main Vector Adaptation Evolution Strategy (MVA-ES) for large-scale, black-box optimization."""
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "MainVectorAdaptation (MVA-ES)")
-        EvolutionStrategy.__init__(self, problem, options)
+        MuCommaLambda.__init__(self, problem, options)
         ndim_problem = problem["ndim_problem"]
-        if self.n_individuals < 4:
-            self.n_individuals = int(4 + numpy.floor(3 * np.log(ndim_problem)))
-            print("For MainVectorAdaptation, the option 'n_individuals' should >= 4, " +\
-                "and it has been reset to {:d} " +
-                "(a commonly suggested value).".format(self.n_individuals))
         self.w_v = options.get("w_v", 3)
         self.c_sigma = options.get("c_sigma", 4 / (ndim_problem + 4))
         self.chi_N = options.get("chi_N", np.sqrt(ndim_problem - 0.5))
