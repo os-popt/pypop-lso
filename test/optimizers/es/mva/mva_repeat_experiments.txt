@@ -655,3 +655,13 @@ $ total runtime: 2.99e+02.
   iteration 69: best_so_far_y 5.04e-09, n_evaluations 100000, step_size: 1.18e-04, runtime: 9.31e+00
   iteration 70: best_so_far_y 4.95e-09, n_evaluations 100000, step_size: 2.37e-06, runtime: 9.38e+00
 $ total runtime: 6.47e+02.
+$$ plot the time consumption of MVA-ES on Sphere:
+  dimension 2: best_so_far_y 1.40e-31, runtime: 6.01e-02
+  dimension 5: best_so_far_y 4.42e-30, runtime: 1.21e-01
+  dimension 10: best_so_far_y 5.66e-29, runtime: 2.47e-01
+  dimension 20: best_so_far_y 2.71e-12, runtime: 3.44e-01
+  dimension 50: best_so_far_y 3.01e+02, runtime: 2.43e-01
+  dimension 100: best_so_far_y 1.10e+03, runtime: 1.78e-01
+  dimension 200: best_so_far_y 2.44e+03, runtime: 1.55e-01
+  dimension 400: best_so_far_y 5.21e+03, runtime: 3.58e-01
+  dimension 800: best_so_far_y 1.09e+04, runtime: 3.52e-01

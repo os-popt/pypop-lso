@@ -101,3 +101,43 @@ for i, f in enumerate(functions):
     plt.legend(loc=1)
     plt.savefig("{}_{}.png".format(i + 1, f.__name__))
     # plt.show()
+
+##
+print("$$ plot the time consumption of MVA-ES on Sphere:")
+ndim_problem = [2, 5, 10, 20, 50, 100, 200, 400, 800]
+n_trials = 70
+best_so_far_y = np.empty((len(ndim_problem), n_trials))
+runtime = np.empty((len(ndim_problem), n_trials))
+# set options of optimizer: a (1, 10) variant without recombination
+options = {"n_individuals": 10,
+    "n_parents": 1,
+    "max_evaluations": 6000,
+    "step_size": 0.3}
+for i, d in enumerate(ndim_problem):
+    # set parameters of problem
+    np.random.seed(20200624 + d) # for repeatability
+    lower_boundary, upper_boundary = -5 * np.ones((d,)), 5 * np.ones((d,))
+    cf.generate_rotation_shift(cf.sphere, d, lower_boundary + 1, upper_boundary - 1)
+    problem = {"ndim_problem": d,
+        "lower_boundary": lower_boundary,
+        "upper_boundary": upper_boundary}
+    # solve
+    for t in range(n_trials):
+        options_t = copy.deepcopy(options)
+        options_t["seed"] = t
+        solver = MVA(problem, options_t)
+        results = solver.optimize(cf.sphere)
+        best_so_far_y[i, t] = results["best_so_far_y"]
+        runtime[i, t] = results["runtime"]
+    message = "  dimension {}: best_so_far_y {:.2e}, runtime: {:.2e}"
+    print(message.format(d, np.mean(best_so_far_y[i, :]), np.mean(runtime[i, :])))
+figure = plt.figure()
+plt.plot(ndim_problem, np.mean(runtime, 1), "k-", label="MVA-ES")
+plt.title("time per generation with function f1 (Sphere)")
+plt.xlabel("dimension (N)")
+plt.ylabel("time [sec]")
+plt.xticks(np.linspace(0, 800, 9))
+plt.yticks(np.linspace(0, 1, 11))
+plt.legend(loc=2)
+plt.savefig("time_consumption.png")
+# plt.show()
