@@ -1,5 +1,9 @@
 import time
+import os
 import numpy as np
+
+from continuous_functions import _transform_and_check
+from shifted_functions import generate_shift_vector
 
 
 class TestCases(object):
@@ -60,6 +64,13 @@ class TestCases(object):
         return np.array(X)
 
 
+# helper functions
+def _load_shift_vector(func, x):
+    data_path = os.path.join("po_input_data", "shift_vector___" +
+        func.__name__ + "_dim_" + str(x.size) + ".txt")
+    shift_vector = _transform_and_check(np.loadtxt(data_path))
+    return shift_vector
+
 def _search_tolerance(y1, y2, atols=None):
     if atols is None:
         atols = [(10 ** i) for i in range(-9, 2)]
@@ -71,12 +82,20 @@ def _search_tolerance(y1, y2, atols=None):
 
 
 class BenchmarkTest(object):
-    def check_via_sampling(func, y, start_from=1, end_with=7):
+    def check_via_sampling(func, y, start_from=1, end_with=7, is_shifted=False):
         start_time = time.time()
-        print("check '{}' via sampling ->".format(func.__name__))
+        if is_shifted:
+            shift_sign = "shifted "
+        else:
+            shift_sign = ""
+        print("check {}'{}' via sampling ->".format(shift_sign, func.__name__))
         for d in range(start_from, end_with + 1):
             X = TestCases.load(d)
+            if is_shifted:
+                generate_shift_vector(func, d, -10, 10)
             for s in range(X.shape[0]):
+                if is_shifted:
+                    X[s, :] = X[s, :] + _load_shift_vector(func, X[s, :])
                 is_pass, atol = _search_tolerance(func(X[s, :]), y[d - start_from][s])
                 if not(is_pass):
                     message = " NOT "
@@ -88,10 +107,14 @@ class BenchmarkTest(object):
         end_time = time.time()
         print("    : take {:.2f} seconds.".format(end_time - start_time))
 
-    def check_origin(func, y=0, atols=[1e-9], start_from=1, end_with=10000, n_samples=10000):
+    def check_origin(func, y=0, atols=[1e-9], start_from=1, end_with=10000,
+        n_samples=10000, is_shifted=False):
         start_time = time.time()
         for s in range(n_samples):
             x = np.zeros(np.random.randint(start_from, end_with + 1))
+            if is_shifted:
+                generate_shift_vector(func, x.size, -5, 5)
+                x = x + _load_shift_vector(func, x)
             is_pass, atol = _search_tolerance(func(x), y, atols)
             if not(is_pass):
                 message = " NOT "
@@ -99,5 +122,9 @@ class BenchmarkTest(object):
         else:
             message = " "
         end_time = time.time()
-        print("'{}' has{}passed the origin check with tolerance {:.2e}: take {:.2f} seconds.".format(
-            func.__name__, message, atol, end_time - start_time))
+        if is_shifted:
+            shift_sign = "Shifted "
+        else:
+            shift_sign = ""
+        print("{}'{}' has{}passed the origin check with tolerance {:.2e}: take {:.2f} seconds.".format(
+            shift_sign, func.__name__, message, atol, end_time - start_time))
