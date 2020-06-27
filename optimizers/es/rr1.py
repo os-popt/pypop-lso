@@ -36,7 +36,6 @@ class RestartRankOne(MuCommaLambda):
         n_evaluations = 1
         best_so_far_x = np.copy(m)
         best_so_far_y = np.copy(y)
-        Y = np.tile(y, (self.n_individuals,)) # fitness of population
         
         if self.save_fitness_data:
             fitness_data = [y]
@@ -45,10 +44,7 @@ class RestartRankOne(MuCommaLambda):
         termination = "max_evaluations"
         m_c1 = np.sqrt(1 - self.c_cov)
         m_c2 = np.sqrt(self.c_cov)
-        p = np.zeros((self.ndim_problem,))
         p_c1 = 1 - self.c_c
-        s = 0
-        sigma = self.step_size
         is_restart, n_restart = True, 0
         while n_evaluations < self.max_evaluations:
             if is_restart:
@@ -69,13 +65,7 @@ class RestartRankOne(MuCommaLambda):
                     self.n_individuals = self.n_individuals * 2
                     self.n_parents = int(np.floor(self.n_individuals / 2))
                     self.d_sigma = self.d_sigma * 2
-
-                    p = np.zeros((self.ndim_problem,))
-                    s = 0
-                    sigma = self.step_size
-
-                    Y = np.tile(y, (self.n_individuals,))
-                
+                                             
                 # set weights for parents
                 w = np.log(np.arange(1, self.n_parents + 1))
                 w = (np.log(self.n_parents + 1) - w) / (
@@ -83,9 +73,13 @@ class RestartRankOne(MuCommaLambda):
                 mu_eff = 1 / np.sum(np.power(w, 2))
                 W = np.tile(w[:, np.newaxis], (1, self.ndim_problem))
                 
+                p = np.zeros((self.ndim_problem,))
+                Y = np.tile(y, (self.n_individuals,))
                 RR = np.arange(1, self.n_parents * 2 + 1) # ranks
                 p_c2 = np.sqrt(self.c_c * (2 - self.c_c) * mu_eff)
-
+                s = 0
+                sigma = self.step_size
+                
                 is_restart = False
             
             X = np.empty((self.n_individuals, self.ndim_problem)) # population
