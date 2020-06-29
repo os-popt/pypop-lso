@@ -61,7 +61,7 @@ class TestCases(object):
                 [0, 1, 2, 3, 4, 5, 6]]
         else:
             raise TypeError("n_dim should >=1 and <= 7.")
-        return np.array(X)
+        return np.array(X, dtype=np.float64)
 
 
 # helper functions
