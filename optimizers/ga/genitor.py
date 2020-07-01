@@ -21,7 +21,7 @@ class GENITOR(PopulationOptimizer):
         n_individuals = self.n_individuals
         X = np.copy(self._X) # population
         self._X = None # clear
-        Y = np.empty((n_individuals,))
+        Y = np.inf * np.ones((n_individuals,))
         time_evaluations = 0
         n_evaluations = 0 # counter of fitness evaluations
         best_so_far_y = np.inf # best-so-far fitness
@@ -43,17 +43,19 @@ class GENITOR(PopulationOptimizer):
                 selection_prob = selection_prob / np.sum(selection_prob)
                 s = self.rng.choice(n_individuals, 1, p=selection_prob)
                 # mutate (adding a random value with range +-10.0 is not implemented)
-                X[s, :] += 0.03 * self.rng.uniform(
+                x = X[s, :] + 0.03 * self.rng.uniform(
                     self.lower_boundary - self.upper_boundary,
                     self.upper_boundary - self.lower_boundary)
-                x = X[s, :]
             
             # evaluate
             start_evaluation = time.time()
             y = fitness_function(x)
             time_evaluations += (time.time() - start_evaluation)
             n_evaluations += 1
-            Y[s] = y
+
+            if y < Y[s]:
+                Y[s] = y
+                X[s, :] = x
             
             if self.save_fitness_data:
                 fitness_data.append(y)
