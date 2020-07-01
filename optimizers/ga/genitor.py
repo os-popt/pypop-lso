@@ -32,7 +32,7 @@ class GENITOR(PopulationOptimizer):
         # iterate
         termination = "max_evaluations" # by default
         while n_evaluations < self.max_evaluations:
-            # select one parent (no cross-over is implemented)
+            # select one parent (no crossover is implemented)
             if n_evaluations < n_individuals:
                 s = n_evaluations # index for selected parent
                 x = X[s, :]
@@ -44,7 +44,8 @@ class GENITOR(PopulationOptimizer):
                 s = self.rng.choice(n_individuals, 1, p=selection_prob)
                 # mutate (adding a random value with range +-10.0 is not implemented)
                 X[s, :] += 0.03 * self.rng.uniform(
-                    0, self.upper_boundary - self.lower_boundary)
+                    self.lower_boundary - self.upper_boundary,
+                    self.upper_boundary - self.lower_boundary)
                 x = X[s, :]
             
             # evaluate
