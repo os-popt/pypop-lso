@@ -12,3 +12,14 @@ y = [[4, 1, 0, 1, 4],
 BenchmarkTest.check_via_sampling(sphere, y, is_shifted=True)
 BenchmarkTest.check_origin(sphere, n_samples=100, is_shifted=True)
 print("")
+
+# shifted cigar
+y = [[4000004, 1000001, 0, 1000001, 4000004],
+    [8000004, 2000001, 0, 2000001, 8000004],
+    [0, 3000001, 3000001, 3000001, 29000001, 29000001, 14000016],
+    [0, 4000001, 4000001, 4000001, 54000001, 54000001, 30000025],
+    [0, 5000001, 5000001, 5000001, 90000001, 90000001, 55000036],
+    [0, 6000001, 6000001, 6000001, 139000001, 139000001, 91000049, 91000000]]
+BenchmarkTest.check_via_sampling(cigar, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(cigar, start_from=2, n_samples=100, is_shifted=True)
+print("")
