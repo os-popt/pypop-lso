@@ -34,3 +34,14 @@ y = [[4000004, 1000001, 0, 1000001, 4000004],
 BenchmarkTest.check_via_sampling(discus, y, start_from=2, is_shifted=True)
 BenchmarkTest.check_origin(discus, start_from=2, n_samples=100, is_shifted=True)
 print("")
+
+# shifted cigar_discus
+y = [[4000004, 1000001, 0, 1000001, 4000004],
+    [4040004, 1010001, 0, 1010001, 4040004],
+    [0, 1020001, 1020001, 1020001, 16130001, 16130001, 1130016],
+    [0, 1030001, 1030001, 1030001, 25290001, 25290001, 1290025],
+    [0, 1040001, 1040001, 1040001, 36540001, 36540001, 1540036],
+    [0, 1050001, 1050001, 1050001, 49900001, 49900001, 1900049, 36550000]]
+BenchmarkTest.check_via_sampling(cigar_discus, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(cigar_discus, start_from=2, n_samples=100, is_shifted=True)
+print("")
