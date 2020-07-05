@@ -45,3 +45,14 @@ y = [[4000004, 1000001, 0, 1000001, 4000004],
 BenchmarkTest.check_via_sampling(cigar_discus, y, start_from=2, is_shifted=True)
 BenchmarkTest.check_origin(cigar_discus, start_from=2, n_samples=100, is_shifted=True)
 print("")
+
+# shifted ellipsoid
+y = [[4000004, 1000001, 0, 1000001, 4000004],
+    [4004004, 1001001, 0, 1001001, 4004004],
+    [0, 1010101, 1010101, 1010101, 16090401, 16090401, 1040916],
+    [0, 1032655, 1032655, 1032655, 25515092, 25515092, 1136022],
+    [0, 1067345, 1067345, 1067345, 37643416, 37643416, 1292664],
+    [0, 1111111, 1111111, 1111111, 52866941, 52866941, 1508909, 38669410]]
+BenchmarkTest.check_via_sampling(ellipsoid, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(ellipsoid, start_from=2, n_samples=100, is_shifted=True)
+print("")
