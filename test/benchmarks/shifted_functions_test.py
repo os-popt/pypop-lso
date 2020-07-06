@@ -56,3 +56,14 @@ y = [[4000004, 1000001, 0, 1000001, 4000004],
 BenchmarkTest.check_via_sampling(ellipsoid, y, start_from=2, is_shifted=True)
 BenchmarkTest.check_origin(ellipsoid, start_from=2, n_samples=100, is_shifted=True)
 print("")
+
+# shifted different_powers
+y = [[68, 2, 0, 2, 68],
+    [84, 3, 0, 3, 84],
+    [0, 4, 4, 4, 4275.6, 4275.6, 81.3],
+    [0, 5, 5, 5, 16739, 16739, 203],
+    [0, 6, 6, 6, 51473.5, 51473.5, 437.1],
+    [0, 7, 7, 7, 133908.7, 133908.7, 847.4, 52736.8]]
+BenchmarkTest.check_via_sampling(different_powers, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(different_powers, start_from=2, n_samples=100, is_shifted=True)
+print("")
