@@ -67,3 +67,14 @@ y = [[68, 2, 0, 2, 68],
 BenchmarkTest.check_via_sampling(different_powers, y, start_from=2, is_shifted=True)
 BenchmarkTest.check_origin(different_powers, start_from=2, n_samples=100, is_shifted=True)
 print("")
+
+# shifted parabolic_ridge
+y = [[402, 101, 0, 99, 398],
+    [802, 201, 0, 199, 798],
+    [0, 299, 301, 299, 2899, 2899, 1404],
+    [0, 399, 401, 399, 5399, 5399, 3005],
+    [0, 499, 501, 499, 8999, 8999, 5506],
+    [0, 599, 601, 599, 13899, 13899, 9107, 9100]]
+BenchmarkTest.check_via_sampling(parabolic_ridge, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(parabolic_ridge, start_from=2, n_samples=100, is_shifted=True)
+print("")
