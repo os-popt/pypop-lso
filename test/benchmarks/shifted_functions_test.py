@@ -89,3 +89,14 @@ y = [[202, 101, 0, 99, 198],
 BenchmarkTest.check_via_sampling(sharp_ridge, y, start_from=2, is_shifted=True)
 BenchmarkTest.check_origin(sharp_ridge, start_from=2, n_samples=100, is_shifted=True)
 print("")
+
+# shifted schwefel12
+y = [[4, 1, 0, 5, 20],
+    [8, 2, 0, 6, 24],
+    [0, 30, 30, 2, 146, 10, 18],
+    [0, 55, 55, 3, 371, 19, 55],
+    [0, 91, 91, 7, 812, 28, 195],
+    [0, 140, 140, 8, 1596, 44, 564, 812]]
+BenchmarkTest.check_via_sampling(schwefel12, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(schwefel12, start_from=2, n_samples=1, is_shifted=True)
+print("")
