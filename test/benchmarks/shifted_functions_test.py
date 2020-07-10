@@ -98,5 +98,17 @@ y = [[4, 1, 0, 5, 20],
     [0, 91, 91, 7, 812, 28, 195],
     [0, 140, 140, 8, 1596, 44, 564, 812]]
 BenchmarkTest.check_via_sampling(schwefel12, y, start_from=2, is_shifted=True)
-BenchmarkTest.check_origin(schwefel12, start_from=2, n_samples=1, is_shifted=True)
+# BenchmarkTest.check_origin(schwefel12, start_from=2, n_samples=1, is_shifted=True)
+print("")
+
+# schwefel221
+y = [[2, 1, 0, 1, 2],
+    [2, 1, 0, 1, 2],
+    [2, 1, 0, 1, 2],
+    [0, 1, 1, 1, 4, 4, 4],
+    [0, 1, 1, 1, 5, 5, 5],
+    [0, 1, 1, 1, 6, 6, 6],
+    [0, 1, 1, 1, 7, 7, 7, 6]]
+BenchmarkTest.check_via_sampling(schwefel221, y, is_shifted=True)
+BenchmarkTest.check_origin(schwefel221, n_samples=100, is_shifted=True)
 print("")
