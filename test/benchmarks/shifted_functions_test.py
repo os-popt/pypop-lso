@@ -101,7 +101,7 @@ BenchmarkTest.check_via_sampling(schwefel12, y, start_from=2, is_shifted=True)
 # BenchmarkTest.check_origin(schwefel12, start_from=2, n_samples=1, is_shifted=True)
 print("")
 
-# schwefel221
+# shifted schwefel221
 y = [[2, 1, 0, 1, 2],
     [2, 1, 0, 1, 2],
     [2, 1, 0, 1, 2],
@@ -111,4 +111,15 @@ y = [[2, 1, 0, 1, 2],
     [0, 1, 1, 1, 7, 7, 7, 6]]
 BenchmarkTest.check_via_sampling(schwefel221, y, is_shifted=True)
 BenchmarkTest.check_origin(schwefel221, n_samples=100, is_shifted=True)
+print("")
+
+# shifted griewank
+y = [[1.066895, 0.589738, 0, 0.589738, 1.066895],
+    [1.029230, 0.656567, 0, 0.656567, 1.029230],
+    [0, 0.698951, 0.698951, 0.698951, 1.001870, 1.001870, 0.886208],
+    [0, 0.728906, 0.728906, 0.728906, 1.017225, 1.017225, 0.992641],
+    [0, 0.751538, 0.751538, 0.751538, 1.020074, 1.020074, 0.998490],
+    [0, 0.769431, 0.769431, 0.769431, 1.037353, 1.037353, 1.054868, 1.024118]]
+BenchmarkTest.check_via_sampling(griewank, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(griewank, start_from=2, n_samples=100, is_shifted=True)
 print("")
