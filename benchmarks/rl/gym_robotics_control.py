@@ -1,3 +1,16 @@
+"""
+Benchmarking population-based optimizers on the following 8 gym Robotics environments
+from https://openai.com/blog/ingredients-for-robotics-research/ :
+
+    1. "FetchPickAndPlace-v1"   : nd_obs: (25,), nd_des: (3,), nd_ach: (3,), nd_act: (4,); nd_search: 100
+    2. "FetchPush-v1"           : nd_obs: (25,), nd_des: (3,), nd_ach: (3,), nd_act: (4,); nd_search: 100
+    3. "FetchReach-v1"          : nd_obs: (10,), nd_des: (3,), nd_ach: (3,), nd_act: (4,); nd_search: 40
+    4. "FetchSlide-v1"          : nd_obs: (25,), nd_des: (3,), nd_ach: (3,), nd_act: (4,); nd_search: 100
+    5. "HandManipulateBlock-v0" : nd_obs: (61,), nd_des: (7,), nd_ach: (7,), nd_act: (20,); nd_search: 1220
+    6. "HandManipulateEgg-v0"   : nd_obs: (61,), nd_des: (7,), nd_ach: (7,), nd_act: (20,); nd_search: 1220
+    7. "HandManipulatePen-v0"   : nd_obs: (61,), nd_des: (7,), nd_ach: (7,), nd_act: (20,); nd_search: 1220
+    8. "HandReach-v0"           : nd_obs: (63,), nd_des: (15,), nd_ach: (15,), nd_act: (20,); nd_search: 1260
+"""
 import time
 from datetime import datetime
 import copy
