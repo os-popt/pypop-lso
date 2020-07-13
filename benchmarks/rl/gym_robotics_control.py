@@ -16,6 +16,7 @@ from datetime import datetime
 import copy
 import numpy as np
 import gym
+from gym.wrappers import FilterObservation, FlattenObservation
 from pyvirtualdisplay import Display
 
 
@@ -31,7 +32,7 @@ def _fitness_function(weights, env, ndim_actions, episode_length):
     observation = env.reset()
     accumulated_reward = 0
     for i in range(episode_length):
-        actions = _linear_policy(observation["observation"], ndim_actions, weights)
+        actions = _linear_policy(observation, ndim_actions, weights)
         observation, reward, done, _ = env.step(actions)
         accumulated_reward += reward
         if done:
@@ -88,7 +89,8 @@ class ContinuousControl(object):
 
             # set parameters of problem
             env = gym.make(env_name)
-            ndim_observation = env.observation_space["observation"].shape[0]
+            env = FlattenObservation(FilterObservation(env, ['observation', 'desired_goal']))
+            ndim_observation = env.observation_space.shape[0]
             ndim_actions = env.action_space.shape[0]
             ndim_problem = ndim_observation * ndim_actions
             problem = {"ndim_problem": ndim_problem,
@@ -135,7 +137,8 @@ class ContinuousControl(object):
             for j in range(self.n_test):
                 # set parameters of problem
                 env = gym.make(env_name)
-                ndim_observation = env.observation_space["observation"].shape[0]
+                env = FlattenObservation(FilterObservation(env, ['observation', 'desired_goal']))
+                ndim_observation = env.observation_space.shape[0]
                 ndim_actions = env.action_space.shape[0]
                 ndim_problem = ndim_observation * ndim_actions
                 problem = {"ndim_problem": ndim_problem,
