@@ -3,22 +3,28 @@ from datetime import datetime
 import copy
 import numpy as np
 import gym
+import torch
 from pyvirtualdisplay import Display
 
 
-def _linear_policy(observation, ndim_actions, weights):
-    weights = np.asarray(weights)
-    # reshape 'weights' to make each column represent 
-    # a mapping from 'observation' to an action
-    weights = np.reshape(weights, (-1, ndim_actions))
-    actions = [np.dot(observation, weights[:, a]) for a in range(ndim_actions)]
-    return np.array(actions)
+torch.set_default_tensor_type(torch.DoubleTensor)
 
-def _fitness_function(weights, env, ndim_actions, episode_length):
+
+def _nn_policy(observation, model):
+    actions = model(torch.from_numpy(observation))
+    return actions.detach().numpy()
+
+def _fitness_function(weights, env, episode_length, model, separators):
+    nn_weights = dict()
+    for k, v in model.state_dict().items():
+        part_nn_weights = weights[separators[k]].reshape(v.shape).copy()
+        nn_weights[k] = torch.from_numpy(part_nn_weights)
+    model.load_state_dict(nn_weights)
+
     observation = env.reset()
     accumulated_reward = 0
     for i in range(episode_length):
-        actions = _linear_policy(observation, ndim_actions, weights)
+        actions = _nn_policy(observation, model)
         observation, reward, done, _ = env.step(actions)
         accumulated_reward += reward
         if done:
@@ -56,7 +62,7 @@ class ContinuousControl(object):
         rng = np.random.default_rng(seed_initial_guess)
         self.seed_initial_guess = rng.integers(
             0, np.iinfo(np.int32).max, (len(self.env_names),))
-        self.max_runtime = 3600 * np.array([2, 2, 3, 3, 3, 4]) # seconds
+        self.max_runtime = 3600 * 2 * np.array([2, 2, 3, 3, 3, 4]) # seconds
         self.suffix_txt = suffix_txt
 
         # test-related
@@ -71,20 +77,37 @@ class ContinuousControl(object):
             env = gym.make(env_name)
             ndim_observation = env.observation_space.shape[0]
             ndim_actions = env.action_space.shape[0]
-            ndim_problem = ndim_observation * ndim_actions
+            env_seed_for_train = self.env_seed_for_train[i]
+            episode_length = self.episode_length
+            
+            # set parameters of artificial neural network
+            n_inputs, n_hidden_layer, n_outputs =\
+                ndim_observation, 2 * ndim_actions, ndim_actions
+            model = torch.nn.Sequential(
+                torch.nn.Linear(n_inputs, n_hidden_layer),
+                torch.nn.Tanh(),
+                torch.nn.Linear(n_hidden_layer, n_outputs),
+            )
+            model_weights = np.array([])
+            separators = dict()
+            for k, v in model.state_dict().items():
+                part_model_weights = v.numpy().flatten().copy()
+                separators[k] = np.arange(model_weights.size,
+                    model_weights.size + part_model_weights.size)
+                model_weights = np.concatenate((model_weights, part_model_weights))
+            
+            ndim_problem = model_weights.size
             problem = {"ndim_problem": ndim_problem,
                 "lower_boundary": self.lower_boundary * np.ones((ndim_problem,)),
                 "upper_boundary": self.upper_boundary * np.ones((ndim_problem,))}
             print("** set parameters of {}-d problem: {} with train seed {}".format(
                 ndim_problem, env_name, self.env_seed_for_train[i]))
-            env_seed_for_train = self.env_seed_for_train[i]
-            episode_length = self.episode_length
             
             def fitness_function(weights):
                 if not hasattr(fitness_function, "env_rng"):
                     fitness_function.env_rng = np.random.default_rng(env_seed_for_train)
                 env.seed(int(fitness_function.env_rng.integers(0, np.iinfo(np.int32).max)))
-                return _fitness_function(weights, env, ndim_actions, episode_length)
+                return _fitness_function(weights, env, episode_length, model, separators)
             
             # set options of optimizer
             print("* set options of optimizer: {} with seed_initial_guess {} and seed {}".format(
@@ -118,7 +141,28 @@ class ContinuousControl(object):
                 env = gym.make(env_name)
                 ndim_observation = env.observation_space.shape[0]
                 ndim_actions = env.action_space.shape[0]
-                ndim_problem = ndim_observation * ndim_actions
+                env_seed_for_test = env_seed_pool[j]
+                episode_length = self.episode_length
+                weights = np.loadtxt("env_{}_{}_best_so_far_x{}.txt".format(
+                    env_name, self.optimizer.__name__, self.suffix_txt))
+                
+                # set parameters of artificial neural network
+                n_inputs, n_hidden_layer, n_outputs =\
+                    ndim_observation, 2 * ndim_actions, ndim_actions
+                model = torch.nn.Sequential(
+                    torch.nn.Linear(n_inputs, n_hidden_layer),
+                    torch.nn.Tanh(),
+                    torch.nn.Linear(n_hidden_layer, n_outputs),
+                )
+                model_weights = np.array([])
+                separators = dict()
+                for k, v in model.state_dict().items():
+                    part_model_weights = v.numpy().flatten().copy()
+                    separators[k] = np.arange(model_weights.size,
+                        model_weights.size + part_model_weights.size)
+                    model_weights = np.concatenate((model_weights, part_model_weights))
+
+                ndim_problem = model_weights.size
                 problem = {"ndim_problem": ndim_problem,
                     "lower_boundary": self.lower_boundary * np.ones((ndim_problem,)),
                     "upper_boundary": self.upper_boundary * np.ones((ndim_problem,))}
@@ -129,16 +173,12 @@ class ContinuousControl(object):
                     virtual_display.start()
                     env = gym.wrappers.Monitor(env, "./test_video/env_{}_{}_{}/".format(
                         env_name, self.optimizer.__name__, self.suffix_txt), force=True)
-                env_seed_for_test = env_seed_pool[j]
-                episode_length = self.episode_length
-                weights = np.loadtxt("env_{}_{}_best_so_far_x{}.txt".format(
-                    env_name, self.optimizer.__name__, self.suffix_txt))
                 
                 def fitness_function(weights):
                     if not hasattr(fitness_function, "env_rng"):
                         fitness_function.env_rng = np.random.default_rng(env_seed_for_test)
                     env.seed(int(fitness_function.env_rng.integers(0, np.iinfo(np.int32).max)))
-                    return _fitness_function(weights, env, ndim_actions, episode_length)
+                    return _fitness_function(weights, env, episode_length, model, separators)
                 
                 rewards[i, j] = -1 * fitness_function(weights) # max
                 print("    {}: reward {:.2f}".format(j + 1, rewards[i, j]))
@@ -155,7 +195,7 @@ def grid_search_boundary(optimizer, boundaries=None,
         optimizer_seed=None, options={}, seed_initial_guess=20200608,
         is_test=False):
     if boundaries is None:
-        boundaries = [(-(10 ** i), (10 ** i)) for i in range(-1, 4)]
+        boundaries = [(-(10 ** i), (10 ** i)) for i in range(-1, 3)]
     for i, boundary in enumerate(boundaries):
         lower_boundary, upper_boundary = boundary
         options.setdefault("step_size", 0.3 * (upper_boundary - lower_boundary))
