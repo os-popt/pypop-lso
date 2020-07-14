@@ -46,6 +46,7 @@ class GENITOR(PopulationOptimizer):
                 x = X[s, :] + 0.03 * self.rng.uniform(
                     self.lower_boundary - self.upper_boundary,
                     self.upper_boundary - self.lower_boundary)
+                x = x.squeeze()
             
             # evaluate
             start_evaluation = time.time()
