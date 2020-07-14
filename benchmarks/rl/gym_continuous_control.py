@@ -7,6 +7,7 @@ import torch
 from pyvirtualdisplay import Display
 
 
+gym.logger.setLevel(40)
 torch.set_default_tensor_type(torch.DoubleTensor)
 
 
@@ -62,7 +63,7 @@ class ContinuousControl(object):
         rng = np.random.default_rng(seed_initial_guess)
         self.seed_initial_guess = rng.integers(
             0, np.iinfo(np.int32).max, (len(self.env_names),))
-        self.max_runtime = 3600 * 2 * np.array([2, 2, 3, 3, 3, 4]) # seconds
+        self.max_runtime = 3600 * 3 * np.array([2, 2, 3, 3, 3, 4]) # seconds
         self.suffix_txt = suffix_txt
 
         # test-related
@@ -82,7 +83,7 @@ class ContinuousControl(object):
             
             # set parameters of artificial neural network
             n_inputs, n_hidden_layer, n_outputs =\
-                ndim_observation, 2 * ndim_actions, ndim_actions
+                ndim_observation, ndim_actions, ndim_actions
             model = torch.nn.Sequential(
                 torch.nn.Linear(n_inputs, n_hidden_layer),
                 torch.nn.Tanh(),
@@ -148,7 +149,7 @@ class ContinuousControl(object):
                 
                 # set parameters of artificial neural network
                 n_inputs, n_hidden_layer, n_outputs =\
-                    ndim_observation, 2 * ndim_actions, ndim_actions
+                    ndim_observation, ndim_actions, ndim_actions
                 model = torch.nn.Sequential(
                     torch.nn.Linear(n_inputs, n_hidden_layer),
                     torch.nn.Tanh(),
