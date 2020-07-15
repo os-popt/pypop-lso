@@ -41,12 +41,11 @@ class GENITOR(PopulationOptimizer):
                 X, Y = X[index, :], Y[index]
                 selection_prob = np.arange(n_individuals, 0, -1)
                 selection_prob = selection_prob / np.sum(selection_prob)
-                s = self.rng.choice(n_individuals, 1, p=selection_prob)
+                s = self.rng.choice(n_individuals, 1, p=selection_prob)[0]
                 # mutate (adding a random value with range +-10.0 is not implemented)
                 x = X[s, :] + 0.03 * self.rng.uniform(
                     self.lower_boundary - self.upper_boundary,
                     self.upper_boundary - self.lower_boundary)
-                x = x.squeeze()
             
             # evaluate
             start_evaluation = time.time()
