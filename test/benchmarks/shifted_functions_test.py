@@ -123,3 +123,14 @@ y = [[1.066895, 0.589738, 0, 0.589738, 1.066895],
 BenchmarkTest.check_via_sampling(griewank, y, start_from=2, is_shifted=True)
 BenchmarkTest.check_origin(griewank, start_from=2, n_samples=100, is_shifted=True)
 print("")
+
+# shifted ackley
+y = [[6.593599, 3.625384, 0, 3.625384, 6.593599],
+    [6.593599, 3.625384, 0, 3.625384, 6.593599],
+    [0, 3.625384, 3.625384, 3.625384, 8.434694, 8.434694, 8.434694],
+    [0, 3.625384, 3.625384, 3.625384, 9.697286, 9.697286, 9.697286],
+    [0, 3.625384, 3.625384, 3.625384, 10.821680, 10.821680, 10.821680],
+    [0, 3.625384, 3.625384, 3.625384, 11.823165, 11.823165, 11.823165, 10.275757]]
+BenchmarkTest.check_via_sampling(ackley, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(ackley, start_from=2, n_samples=100, is_shifted=True)
+print("")
