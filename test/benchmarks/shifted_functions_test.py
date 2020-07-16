@@ -134,3 +134,14 @@ y = [[6.593599, 3.625384, 0, 3.625384, 6.593599],
 BenchmarkTest.check_via_sampling(ackley, y, start_from=2, is_shifted=True)
 BenchmarkTest.check_origin(ackley, start_from=2, n_samples=100, is_shifted=True)
 print("")
+
+# shifted rastrigin
+y = [[8, 2, 0, 2, 8],
+    [12, 3, 0, 3, 12],
+    [0, 4, 4, 4, 30, 30, 30],
+    [0, 5, 5, 5, 55, 55, 55],
+    [0, 6, 6, 6, 91, 91, 91],
+    [0, 7, 7, 7, 140, 140, 140, 91]]
+BenchmarkTest.check_via_sampling(rastrigin, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(rastrigin, start_from=2, n_samples=100, is_shifted=True)
+print("")
