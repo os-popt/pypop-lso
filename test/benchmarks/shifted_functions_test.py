@@ -167,3 +167,14 @@ y = [[404, 101, 0, 200, 800],
 BenchmarkTest.check_via_sampling(skew_rastrigin, y, start_from=2, is_shifted=True)
 BenchmarkTest.check_origin(skew_rastrigin, start_from=2, n_samples=100, is_shifted=True)
 print("")
+
+# shifted schaffer
+y = [[3.2203, 1.2280, 0, 1.2280, 3.2203],
+    [6.4407, 2.4560, 0, 2.4560, 6.4407],
+    [0, 3.6840, 3.6840, 3.6840, 8.4804, 8.4804, 8.4804],
+    [0, 4.9120, 4.9120, 4.9120, 11.1405, 11.1405, 11.1405],
+    [0, 6.1400, 6.1400, 6.1400, 13.9369, 13.9369, 13.9369],
+    [0, 7.3680, 7.3680, 7.3680, 17.8647, 17.8647, 17.8647, 15.0058]]
+BenchmarkTest.check_via_sampling(schaffer, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(schaffer, start_from=2, n_samples=100, is_shifted=True)
+print("")
