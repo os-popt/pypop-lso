@@ -4,6 +4,7 @@ import numpy as np
 
 from continuous_functions import _transform_and_check
 from shifted_functions import generate_shift_vector
+from rotated_functions import generate_rotation_matrix
 
 
 class TestCases(object):
@@ -108,13 +109,15 @@ class BenchmarkTest(object):
         print("    : take {:.2f} seconds.".format(end_time - start_time))
 
     def check_origin(func, y=0, atols=[1e-9], start_from=1, end_with=10000,
-        n_samples=10000, is_shifted=False):
+        n_samples=10000, is_shifted=False, is_rotated=False):
         start_time = time.time()
         for s in range(n_samples):
             x = np.zeros(np.random.randint(start_from, end_with + 1))
             if is_shifted:
                 generate_shift_vector(func, x.size, -5, 5)
                 x = x + _load_shift_vector(func, x)
+            if is_rotated:
+                generate_rotation_matrix(func, x.size)
             is_pass, atol = _search_tolerance(func(x), y, atols)
             if not(is_pass):
                 message = " NOT "
@@ -123,8 +126,10 @@ class BenchmarkTest(object):
             message = " "
         end_time = time.time()
         if is_shifted:
-            shift_sign = "Shifted "
+            message_sign = "Shifted "
+        elif is_rotated:
+            message_sign = "Rotated "
         else:
-            shift_sign = ""
+            message_sign = ""
         print("{}'{}' has{}passed the origin check with tolerance {:.2e}: take {:.2f} seconds.".format(
-            shift_sign, func.__name__, message, atol, end_time - start_time))
+            message_sign, func.__name__, message, atol, end_time - start_time))
