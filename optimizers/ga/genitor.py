@@ -5,7 +5,15 @@ from optimizer import PopulationOptimizer, compress_fitness_data
 
 
 class GENITOR(PopulationOptimizer):
-    """Genetic reinforcement learning (GENITOR)."""
+    """Genetic reinforcement learning (GENITOR).
+    
+    Reference
+    ---------
+    Whitley, D., Dominic, S., Das, R. and Anderson, C.W., 1993.
+    Genetic reinforcement learning for neurocontrol problems.
+    Machine Learning, 13(2-3), pp.259-284.
+    https://link.springer.com/content/pdf/10.1007/BF00993045.pdf
+    """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "GENITOR")
         options.setdefault("n_individuals", 50)
