@@ -5,7 +5,7 @@ from optimizer import PopulationOptimizer, compress_fitness_data
 
 
 class GENITOR(PopulationOptimizer):
-    """Genetic reinforcement learning (GENITOR).
+    """Genetic Reinforcement Learning (GENITOR).
     
     Reference
     ---------
@@ -16,7 +16,7 @@ class GENITOR(PopulationOptimizer):
     """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "GENITOR")
-        options.setdefault("n_individuals", 50)
+        options.setdefault("n_individuals", 50) # number of individuals
         PopulationOptimizer.__init__(self, problem, options)
     
     def optimize(self, fitness_function=None):
@@ -27,11 +27,11 @@ class GENITOR(PopulationOptimizer):
         
         # initialize
         n_individuals = self.n_individuals
-        X = np.copy(self._X) # population
-        self._X = None # clear
-        Y = np.inf * np.ones((n_individuals,))
-        time_evaluations = 0
-        n_evaluations = 0 # counter of fitness evaluations
+        X = np.copy(self._X) # population, each row denotes an individual
+        self._X = None # to save memory space
+        Y = np.inf * np.ones((n_individuals,)) # fitness of population
+        time_evaluations = 0 # time of fitness evaluations
+        n_evaluations = 0 # number of fitness evaluations
         best_so_far_y = np.inf # best-so-far fitness
 
         if self.save_fitness_data:
@@ -39,21 +39,21 @@ class GENITOR(PopulationOptimizer):
         
         # iterate
         termination = "max_evaluations" # by default
+        search_range = self.upper_boundary - self.lower_boundary
         while n_evaluations < self.max_evaluations:
             # select one parent (no crossover is implemented)
-            if n_evaluations < n_individuals:
+            if n_evaluations < n_individuals: # only for the first generation
                 s = n_evaluations # index for selected parent
                 x = X[s, :]
             else:
                 index = np.argsort(Y)
                 X, Y = X[index, :], Y[index]
-                selection_prob = np.arange(n_individuals, 0, -1)
-                selection_prob = selection_prob / np.sum(selection_prob)
-                s = self.rng.choice(n_individuals, 1, p=selection_prob)[0]
+                # update selection probability of each individual
+                select_prob = np.arange(n_individuals, 0, -1)
+                select_prob = select_prob / np.sum(select_prob)
+                s = self.rng.choice(n_individuals, 1, p=select_prob)[0]
                 # mutate (adding a random value with range +-10.0 is not implemented)
-                x = X[s, :] + 0.03 * self.rng.uniform(
-                    self.lower_boundary - self.upper_boundary,
-                    self.upper_boundary - self.lower_boundary)
+                x = X[s, :] + 0.03 * self.rng.uniform(-search_range, search_range)
             
             # evaluate
             start_evaluation = time.time()
@@ -68,7 +68,7 @@ class GENITOR(PopulationOptimizer):
             if self.save_fitness_data:
                 fitness_data.append(y)
             
-            # update best-so-far x and y
+            # update best-so-far individual (x) and fitness (y)
             if best_so_far_y > y:
                 best_so_far_x = np.copy(x)
                 best_so_far_y = np.copy(y)
@@ -82,7 +82,7 @@ class GENITOR(PopulationOptimizer):
                 termination = "threshold_fitness"
                 break
         
-        if self.save_fitness_data:
+        if self.save_fitness_data: # to save storage space
             start_compression = time.time()
             fitness_data = compress_fitness_data(fitness_data, self.len_fitness_data)
             time_compression = time.time() - start_compression
