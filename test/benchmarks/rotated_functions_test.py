@@ -20,3 +20,8 @@ print("")
 BenchmarkTest.check_origin(cigar_discus,
     end_with=1000, n_samples=10, is_rotated=True)
 print("")
+
+# rotated ellipsoid
+BenchmarkTest.check_origin(ellipsoid,
+    end_with=1000, n_samples=10, is_rotated=True)
+print("")
