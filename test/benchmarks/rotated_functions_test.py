@@ -25,3 +25,8 @@ print("")
 BenchmarkTest.check_origin(ellipsoid,
     end_with=1000, n_samples=10, is_rotated=True)
 print("")
+
+# rotated different_powers
+BenchmarkTest.check_origin(different_powers,
+    end_with=1000, n_samples=10, is_rotated=True)
+print("")
