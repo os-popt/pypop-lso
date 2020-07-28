@@ -30,3 +30,8 @@ print("")
 BenchmarkTest.check_origin(different_powers,
     end_with=1000, n_samples=10, is_rotated=True)
 print("")
+
+# rotated parabolic_ridge
+BenchmarkTest.check_origin(parabolic_ridge,
+    end_with=1000, n_samples=10, is_rotated=True)
+print("")
