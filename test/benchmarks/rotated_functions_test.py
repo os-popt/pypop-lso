@@ -45,3 +45,8 @@ print("")
 BenchmarkTest.check_origin(schwefel221,
     end_with=1000, n_samples=10, is_rotated=True)
 print("")
+
+# rotated griewank
+BenchmarkTest.check_origin(griewank,
+    end_with=1000, n_samples=10, is_rotated=True)
+print("")
