@@ -16,6 +16,8 @@ def _load_rotation_matrix(func, x, rotation_matrix=None):
         rotation_matrix = func.rotation_matrix
     else:
         rotation_matrix = np.squeeze(rotation_matrix)
+    if rotation_matrix.ndim == 0:
+        rotation_matrix = np.reshape(rotation_matrix, [1, 1])
     if rotation_matrix.shape != (x.size, x.size):
         raise TypeError("rotation_matrix should have the same size as x " +
             "after squeezing it via numpy.squeeze().")
