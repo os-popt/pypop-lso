@@ -53,10 +53,15 @@ print("")
 
 # rotated ackley
 BenchmarkTest.check_origin(ackley,
-    start_from=2, end_with=1000, n_samples=10, is_rotated=True)
+    end_with=1000, n_samples=10, is_rotated=True)
 print("")
 
 # rotated rastrigin
 BenchmarkTest.check_origin(rastrigin,
+    end_with=1000, n_samples=10, is_rotated=True)
+print("")
+
+# rotated scaled_rastrigin
+BenchmarkTest.check_origin(scaled_rastrigin,
     end_with=1000, n_samples=10, is_rotated=True)
 print("")
