@@ -11,6 +11,23 @@ gym.logger.setLevel(40)
 torch.set_default_tensor_type(torch.DoubleTensor)
 
 
+def _make_nn_model(n_inputs, n_hidden_layer, n_outputs):
+    model = torch.nn.Sequential(
+        torch.nn.Linear(n_inputs, n_hidden_layer),
+        torch.nn.Tanh(),
+        torch.nn.Linear(n_hidden_layer, n_outputs),
+        torch.nn.Tanh(),
+    )
+    model_weights = np.array([])
+    separators = dict()
+    for k, v in model.state_dict().items():
+        part_model_weights = v.numpy().flatten().copy()
+        separators[k] = np.arange(model_weights.size,
+            model_weights.size + part_model_weights.size)
+        model_weights = np.concatenate((model_weights, part_model_weights))
+    ndim_problem = model_weights.size
+    return model, separators, ndim_problem
+
 def _nn_policy(observation, model):
     actions = model(torch.from_numpy(observation))
     return actions.detach().numpy()
@@ -52,6 +69,9 @@ class ContinuousControl(object):
         self.lower_boundary = lower_boundary
         self.upper_boundary = upper_boundary
 
+        # model-related
+        self.multiplier_widening_nn = 1
+
         # optimizer-related
         self.optimizer = optimizer
         if optimizer_seed is None:
@@ -83,21 +103,11 @@ class ContinuousControl(object):
             
             # set parameters of artificial neural network
             n_inputs, n_hidden_layer, n_outputs =\
-                ndim_observation, ndim_actions, ndim_actions
-            model = torch.nn.Sequential(
-                torch.nn.Linear(n_inputs, n_hidden_layer),
-                torch.nn.Tanh(),
-                torch.nn.Linear(n_hidden_layer, n_outputs),
-            )
-            model_weights = np.array([])
-            separators = dict()
-            for k, v in model.state_dict().items():
-                part_model_weights = v.numpy().flatten().copy()
-                separators[k] = np.arange(model_weights.size,
-                    model_weights.size + part_model_weights.size)
-                model_weights = np.concatenate((model_weights, part_model_weights))
-            
-            ndim_problem = model_weights.size
+                ndim_observation,\
+                self.multiplier_widening_nn * ndim_actions,\
+                ndim_actions
+            model, separators, ndim_problem =\
+                _make_nn_model(n_inputs, n_hidden_layer, n_outputs)
             problem = {"ndim_problem": ndim_problem,
                 "lower_boundary": self.lower_boundary * np.ones((ndim_problem,)),
                 "upper_boundary": self.upper_boundary * np.ones((ndim_problem,))}
@@ -149,21 +159,11 @@ class ContinuousControl(object):
                 
                 # set parameters of artificial neural network
                 n_inputs, n_hidden_layer, n_outputs =\
-                    ndim_observation, ndim_actions, ndim_actions
-                model = torch.nn.Sequential(
-                    torch.nn.Linear(n_inputs, n_hidden_layer),
-                    torch.nn.Tanh(),
-                    torch.nn.Linear(n_hidden_layer, n_outputs),
-                )
-                model_weights = np.array([])
-                separators = dict()
-                for k, v in model.state_dict().items():
-                    part_model_weights = v.numpy().flatten().copy()
-                    separators[k] = np.arange(model_weights.size,
-                        model_weights.size + part_model_weights.size)
-                    model_weights = np.concatenate((model_weights, part_model_weights))
-
-                ndim_problem = model_weights.size
+                    ndim_observation,\
+                    self.multiplier_widening_nn * ndim_actions,\
+                    ndim_actions
+                model, separators, ndim_problem =\
+                    _make_nn_model(n_inputs, n_hidden_layer, n_outputs)
                 problem = {"ndim_problem": ndim_problem,
                     "lower_boundary": self.lower_boundary * np.ones((ndim_problem,)),
                     "upper_boundary": self.upper_boundary * np.ones((ndim_problem,))}
