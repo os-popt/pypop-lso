@@ -65,3 +65,8 @@ print("")
 BenchmarkTest.check_origin(scaled_rastrigin,
     end_with=1000, n_samples=10, is_rotated=True)
 print("")
+
+# rotated skew_rastrigin
+BenchmarkTest.check_origin(skew_rastrigin,
+    end_with=1000, n_samples=10, is_rotated=True)
+print("")
