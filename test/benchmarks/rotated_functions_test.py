@@ -75,3 +75,8 @@ print("")
 BenchmarkTest.check_origin(schaffer,
     start_from=2, end_with=1000, n_samples=10, is_rotated=True)
 print("")
+
+# rotated bohachevsky
+BenchmarkTest.check_origin(bohachevsky,
+    start_from=2, end_with=1000, n_samples=10, is_rotated=True)
+print("")
