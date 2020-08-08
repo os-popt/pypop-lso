@@ -125,11 +125,10 @@ class BenchmarkTest(object):
         else:
             message = " "
         end_time = time.time()
+        message_sign = ""
+        if is_rotated:
+            message_sign += "Rotated "
         if is_shifted:
-            message_sign = "Shifted "
-        elif is_rotated:
-            message_sign = "Rotated "
-        else:
-            message_sign = ""
+            message_sign += "Shifted "
         print("{}'{}' has{}passed the origin check with tolerance {:.2e}: take {:.2f} seconds.".format(
             message_sign, func.__name__, message, atol, end_time - start_time))
