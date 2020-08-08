@@ -17,6 +17,12 @@ class EvolutionStrategy(PopulationOptimizer):
         # mu -> n_parents
         self.n_parents = int(options.get("n_parents", np.floor(self.n_individuals / 2)))
 
+class OnePlusOne(EvolutionStrategy):
+    def __init__(self, problem, options):
+        options["n_individuals"] = 1
+        options["n_parents"] = 1
+        EvolutionStrategy.__init__(self, problem, options)
+
 class MuCommaLambda(EvolutionStrategy):
     def __init__(self, problem, options):
         EvolutionStrategy.__init__(self, problem, options)
