@@ -20,7 +20,7 @@ class Rechenberg(OnePlusOne):
         start_optimization = time.time()
 
         if (fitness_function is None) and (self.fitness_function != None):
-                fitness_function = self.fitness_function
+            fitness_function = self.fitness_function
         
         # initialize
         x = np.copy(self._X) # population with one individual
