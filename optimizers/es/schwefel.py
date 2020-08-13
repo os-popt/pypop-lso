@@ -57,6 +57,8 @@ class Schwefel(OnePlusOne):
                     parent_x, parent_y = np.copy(x), np.copy(y)
                     n_success = 0
                     step_size = self.step_size
+                    if best_so_far_y > y:
+                        best_so_far_x, best_so_far_y = np.copy(x), np.copy(y)
                     if self.save_fitness_data:
                         fitness_data.append(y)
                 is_restart = False
