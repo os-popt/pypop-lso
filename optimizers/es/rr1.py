@@ -6,7 +6,15 @@ from es import MuCommaLambda
 
 
 class RestartRankOne(MuCommaLambda):
-    """Restart-based Rank-One Evolution Strategy (R-R1-ES) for large-scale, black-box optimization."""
+    """Restart-based Rank-One Evolution Strategy (R-R1-ES) for large-scale, black-box optimization.
+    
+    Reference
+    ---------
+    Li, Z. and Zhang, Q., 2017.
+    A simple yet efficient evolution strategy for large-scale black-box optimization.
+    IEEE Transactions on Evolutionary Computation, 22(5), pp.637-646.
+    https://ieeexplore.ieee.org/abstract/document/8080257
+    """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "RestartRankOne (R-R1-ES)")
         MuCommaLambda.__init__(self, problem, options)
