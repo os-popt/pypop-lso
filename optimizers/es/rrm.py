@@ -6,7 +6,15 @@ from es import MuCommaLambda
 
 
 class RestartRm(MuCommaLambda):
-    """Restart-based Rm Evolution Strategy (R-Rm-ES) for large-scale, black-box optimization."""
+    """Restart-based Rm Evolution Strategy (R-Rm-ES) for large-scale, black-box optimization.
+    
+    Reference
+    ---------
+    Li, Z. and Zhang, Q., 2017.
+    A simple yet efficient evolution strategy for large-scale black-box optimization.
+    IEEE Transactions on Evolutionary Computation, 22(5), pp.637-646.
+    https://ieeexplore.ieee.org/abstract/document/8080257
+    """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "RestartRm (R-Rm-ES)")
         MuCommaLambda.__init__(self, problem, options)
