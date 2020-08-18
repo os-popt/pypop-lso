@@ -6,7 +6,15 @@ from es import OnePlusOne
 
 
 class Rechenberg(OnePlusOne):
-    """Rechenberg's (1+1)-Evolution Strategy (Rechenberg's (1+1)-ES)."""
+    """Rechenberg's (1+1)-Evolution Strategy (Rechenberg's (1+1)-ES).
+    
+    Reference
+    ---------
+    Back, T., Hoffmeister, F. and Schwefel, H.P., 1991, July.
+    A survey of evolution strategies.
+    In Proceedings of the Fourth International Conference on Genetic Algorithms (Vol. 2, No. 9).
+    Morgan Kaufmann Publishers, San Mateo, CA.
+    """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "Rechenberg (Rechenberg's (1+1)-ES)")
         n_individuals = options.get("n_individuals")
