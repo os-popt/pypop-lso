@@ -7,7 +7,15 @@ from es import MuCommaLambda
 
 
 class MainVectorAdaptation(MuCommaLambda):
-    """Main Vector Adaptation Evolution Strategy (MVA-ES) for large-scale, black-box optimization."""
+    """Main Vector Adaptation Evolution Strategy (MVA-ES) for large-scale, black-box optimization.
+    
+    Reference
+    ---------
+    Poland, J. and Zell, A., 2001, July.
+    Main vector adaptation: A CMA variant with linear time and space complexity.
+    In Proceedings of the 3rd Annual Conference on Genetic and Evolutionary Computation (pp. 1050-1055).
+    https://dl.acm.org/doi/10.5555/2955239.2955428
+    """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "MainVectorAdaptation (MVA-ES)")
         MuCommaLambda.__init__(self, problem, options)
