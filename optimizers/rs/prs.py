@@ -5,7 +5,15 @@ from optimizer import PopulationOptimizer, compress_fitness_data
 
 
 class PureRandomSearch(PopulationOptimizer):
-    """Pure Random Search (PRS) sampling uniformly on the box-constrained search space."""
+    """Pure Random Search (PRS) sampling uniformly on the box-constrained search space.
+    
+    Reference
+    ---------
+    Brooks, S.H., 1958.
+    A discussion of random methods for seeking maxima.
+    Operations Research, 6(2), pp.244-251.
+    https://pubsonline.informs.org/doi/abs/10.1287/opre.6.2.244
+    """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "PureRandomSearch (PRS)")
         n_individuals = options.get("n_individuals")
@@ -22,7 +30,8 @@ class PureRandomSearch(PopulationOptimizer):
                 fitness_function = self.fitness_function
         
         # initialize
-        x = self._X # population with one individual
+        x = np.copy(self._X) # population with one individual
+        self._X = None # to save memory space
         start_evaluation = time.time()
         y = fitness_function(x) # evaluate fitness of population
         time_evaluations = time.time() - start_evaluation # time used for fitness evaluations
@@ -78,5 +87,4 @@ class PureRandomSearch(PopulationOptimizer):
             "termination": termination,
             "time_evaluations": time_evaluations,
             "time_compression": time_compression}
-        self._X = None # clear
         return results
