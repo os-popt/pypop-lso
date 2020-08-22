@@ -15,3 +15,8 @@ print("")
 BenchmarkTest.check_origin(discus,
     start_from=2, end_with=1000, n_samples=10, is_shifted=True, is_rotated=True)
 print("")
+
+# rotated shifted cigar_discus
+BenchmarkTest.check_origin(cigar_discus,
+    start_from=2, end_with=1000, n_samples=10, is_shifted=True, is_rotated=True)
+print("")
