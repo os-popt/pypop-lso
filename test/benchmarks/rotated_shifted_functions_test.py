@@ -50,3 +50,8 @@ print("")
 BenchmarkTest.check_origin(griewank,
     end_with=1000, n_samples=10, is_shifted=True, is_rotated=True)
 print("")
+
+# rotated shifted ackley
+BenchmarkTest.check_origin(ackley,
+    end_with=1000, n_samples=10, is_shifted=True, is_rotated=True)
+print("")
