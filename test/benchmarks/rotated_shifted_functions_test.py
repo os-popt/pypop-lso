@@ -55,3 +55,8 @@ print("")
 BenchmarkTest.check_origin(ackley,
     end_with=1000, n_samples=10, is_shifted=True, is_rotated=True)
 print("")
+
+# rotated shifted rastrigin
+BenchmarkTest.check_origin(rastrigin,
+    end_with=1000, n_samples=10, is_shifted=True, is_rotated=True)
+print("")
