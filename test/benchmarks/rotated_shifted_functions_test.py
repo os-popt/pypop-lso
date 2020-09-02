@@ -70,3 +70,8 @@ print("")
 BenchmarkTest.check_origin(skew_rastrigin,
     end_with=1000, n_samples=10, is_shifted=True, is_rotated=True)
 print("")
+
+# rotated shifted schaffer
+BenchmarkTest.check_origin(schaffer,
+    start_from=2, end_with=1000, n_samples=10, is_shifted=True, is_rotated=True)
+print("")
