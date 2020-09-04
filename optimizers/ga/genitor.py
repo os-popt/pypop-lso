@@ -6,6 +6,11 @@ from optimizer import PopulationOptimizer, compress_fitness_data
 
 class GENITOR(PopulationOptimizer):
     """Genetic Reinforcement Learning (GENITOR).
+
+    GENITOR is a steady-state genetic algorithm with
+        a real-valued representation,
+        a very high mutation rate (for diversity and exploration),
+        and unusually small populations.
     
     Reference
     ---------
@@ -13,6 +18,11 @@ class GENITOR(PopulationOptimizer):
     Genetic reinforcement learning for neurocontrol problems.
     Machine Learning, 13(2-3), pp.259-284.
     https://link.springer.com/content/pdf/10.1007/BF00993045.pdf
+
+    Moriarty, D.E., Schultz, A.C. and Grefenstette, J.J., 1999.
+    Evolutionary algorithms for reinforcement learning.
+    Journal of Artificial Intelligence Research, 11, pp.241-276.
+    https://www.jair.org/index.php/jair/article/view/10240/24373
     """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "GENITOR")
