@@ -38,9 +38,16 @@ class Optimizer(object):
     def optimize(self, fitness_function):
         pass
     
+    def _check_n_individuals(self, options, class_name, n_individuals=1):
+        """Check the number of individuals, if necessary."""
+        if options.get("n_individuals") not in [None, n_individuals]:
+            print("For {}, 'n_individuals' is reset to {:d} by default (from {:d}).".format(
+                class_name, n_individuals, options.get("n_individuals")))
+            options["n_individuals"] = n_individuals
+
     def __repr__(self):
         tip = "NOTE that the optimizer'name to be printed is not set. " +\
-            "Set the field 'optimizer_name' for the dict object 'options'."
+            "Set 'optimizer_name' for the dict object 'options'."
         optimizer_name = self.options.get("optimizer_name", tip)
         return optimizer_name
 
