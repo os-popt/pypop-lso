@@ -87,6 +87,9 @@ class SimpleRandomSearch(PopulationOptimizer):
             if runtime >= self.max_runtime:
                 termination = "max_runtime"
                 break
+            if best_so_far_y <= self.threshold_fitness:
+                termination = "threshold_fitness"
+                break
         
         if self.save_fitness_data:
             start_compression = time.time()
