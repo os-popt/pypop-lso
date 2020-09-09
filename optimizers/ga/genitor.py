@@ -12,6 +12,9 @@ class GENITOR(PopulationOptimizer):
         a very high mutation rate (for diversity and exploration),
         and unusually small populations.
     
+    Historically, GAs often involve crossover,
+        but for simplicity this code did not include it.
+
     Reference
     ---------
     Whitley, D., Dominic, S., Das, R. and Anderson, C.W., 1993.
@@ -23,6 +26,11 @@ class GENITOR(PopulationOptimizer):
     Evolutionary algorithms for reinforcement learning.
     Journal of Artificial Intelligence Research, 11, pp.241-276.
     https://www.jair.org/index.php/jair/article/view/10240/24373
+
+    Such, F.P., Madhavan, V., Conti, E., Lehman, J., Stanley, K.O. and Clune, J., 2017.
+    Deep neuroevolution: Genetic algorithms are a competitive alternative for training deep neural networks for reinforcement learning.
+    arXiv preprint arXiv:1712.06567.
+    https://arxiv.org/pdf/1712.06567.pdf
     """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "GENITOR")
