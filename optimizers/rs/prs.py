@@ -16,11 +16,7 @@ class PureRandomSearch(PopulationOptimizer):
     """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "PureRandomSearch (PRS)")
-        n_individuals = options.get("n_individuals")
-        if (n_individuals != None) and (n_individuals != 1):
-            options["n_individuals"] = 1
-            print("For PureRandomSearch, only one individual is used to represent the population, " +\
-                "and the option 'n_individuals' has been reset to 1 (not {:d}).".format(n_individuals))
+        PopulationOptimizer._check_n_individuals(self, options, self.__class__.__name__)
         PopulationOptimizer.__init__(self, problem, options)
     
     def optimize(self, fitness_function=None):
