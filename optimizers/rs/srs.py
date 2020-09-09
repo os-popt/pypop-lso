@@ -77,8 +77,8 @@ class SimpleRandomSearch(PopulationOptimizer):
                 x = x + alpha * (best_so_far_x - x)
 
             step_size = max(gamma * step_size, threshold_step_size)
-
-            # check one termination criterion
+            
+            # check two termination criteria
             runtime = time.time() - start_optimization
             if runtime >= self.max_runtime:
                 termination = "max_runtime"
