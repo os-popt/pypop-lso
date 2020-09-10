@@ -17,11 +17,7 @@ class Rechenberg(OnePlusOne):
     """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "Rechenberg (Rechenberg's (1+1)-ES)")
-        n_individuals = options.get("n_individuals")
-        if (n_individuals != None) and (n_individuals != 1):
-            options["n_individuals"] = 1
-            print("For Rechenberg, only one individual is used to represent the population, " +\
-                "and the option 'n_individuals' has been reset to 1 (not {:d}).".format(n_individuals))
+        OnePlusOne._check_n_individuals(self, options, self.__class__.__name__)
         OnePlusOne.__init__(self, problem, options)
     
     def optimize(self, fitness_function=None):
