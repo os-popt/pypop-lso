@@ -96,6 +96,13 @@ class Ostermeier(MuCommaLambda):
             delta *= (np.power(xi[sel], beta) *
                 np.power(np.exp(np.abs(Z[sel, :]) - np.sqrt(2 / np.pi)), beta_scal))
             
+            if np.min(delta) <= self.threshold_step_size:
+                termination = "threshold_step_size (lower)"
+                break
+            if np.max(delta) >= 3 * np.min(self.upper_boundary - self.lower_boundary):
+                termination = "threshold_step_size (upper)"
+                break
+            
         if self.save_fitness_data:
             start_compression = time.time()
             fitness_data = compress_fitness_data(fitness_data, self.len_fitness_data)
