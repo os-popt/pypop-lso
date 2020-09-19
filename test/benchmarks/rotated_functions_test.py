@@ -51,6 +51,15 @@ BenchmarkTest.check_origin(schwefel221,
     end_with=1000, n_samples=10, is_rotated=True)
 print("")
 
+# rotated rosenbrock
+for i in [2, 10, 100, 1000]:
+    generate_rotation_matrix(rosenbrock, i)
+    print(rosenbrock([0 for _ in range(i)]))
+# 1.0
+# 9.0
+# 99.0
+# 999.0
+
 # rotated griewank
 BenchmarkTest.check_origin(griewank,
     end_with=1000, n_samples=10, is_rotated=True)
