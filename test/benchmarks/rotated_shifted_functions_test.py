@@ -1,5 +1,7 @@
+import numpy as np
+
 from rotated_shifted_functions import *
-from test_cases import BenchmarkTest
+from test_cases import BenchmarkTest, _load_shift_vector
 
 # rotated shifted sphere
 BenchmarkTest.check_origin(sphere,
@@ -50,6 +52,13 @@ print("")
 BenchmarkTest.check_origin(schwefel221,
     end_with=1000, n_samples=10, is_shifted=True, is_rotated=True)
 print("")
+
+# rotated shifted rosenbrock
+for i in [2, 10, 100, 1000]:
+    x = np.zeros((i,))
+    generate_shift_vector(rosenbrock, x.size, -5, 5)
+    generate_rotation_matrix(rosenbrock, i)
+    print(rosenbrock(x + _load_shift_vector(rosenbrock, x)))
 
 # rotated shifted griewank
 BenchmarkTest.check_origin(griewank,
