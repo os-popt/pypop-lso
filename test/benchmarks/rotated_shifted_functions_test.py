@@ -55,10 +55,14 @@ print("")
 
 # rotated shifted rosenbrock
 for i in [2, 10, 100, 1000]:
-    x = np.zeros((i,))
+    x = np.zeros((i,)) - 1
     generate_shift_vector(rosenbrock, x.size, -5, 5)
     generate_rotation_matrix(rosenbrock, i)
     print(rosenbrock(x + _load_shift_vector(rosenbrock, x)))
+# 1.0
+# 9.0
+# 99.0
+# 999.0
 
 # rotated shifted griewank
 BenchmarkTest.check_origin(griewank,
