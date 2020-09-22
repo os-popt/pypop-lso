@@ -1,5 +1,5 @@
 from shifted_functions import *
-from test_cases import BenchmarkTest
+from test_cases import BenchmarkTest, _load_shift_vector
 
 # shifted sphere
 y = [[4, 1, 0, 1, 4],
@@ -112,6 +112,16 @@ y = [[2, 1, 0, 1, 2],
 BenchmarkTest.check_via_sampling(schwefel221, y, is_shifted=True)
 BenchmarkTest.check_origin(schwefel221, n_samples=100, is_shifted=True)
 print("")
+
+# shifted rosenbrock
+for i in [2, 10, 100, 1000]:
+    x = np.zeros((i,)) - 1
+    generate_shift_vector(rosenbrock, x.size, -5, 5)
+    print(rosenbrock(x + _load_shift_vector(rosenbrock, x)))
+# 1.0
+# 9.0
+# 99.0
+# 999.0
 
 # shifted griewank
 y = [[1.066895, 0.589738, 0, 0.589738, 1.066895],
