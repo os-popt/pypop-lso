@@ -34,6 +34,9 @@ class Optimizer(object):
         self.n_individuals = options.get("n_individuals", 1)
         self.save_fitness_data = options.get("save_fitness_data", True)
         self.len_fitness_data = options.get("len_fitness_data", 2000)
+        self.save_best_so_far_x = options.get("save_best_so_far_x", False)
+        self.freq_best_so_far_x = options.get("freq_best_so_far_x", 1000)
+        self.txt_best_so_far_x = options.get("txt_best_so_far_x", "history_best_so_far_x.txt")
 
     def optimize(self, fitness_function=None):
         pass
