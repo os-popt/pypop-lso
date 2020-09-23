@@ -35,7 +35,7 @@ class Optimizer(object):
         self.save_fitness_data = options.get("save_fitness_data", True)
         self.len_fitness_data = options.get("len_fitness_data", 2000)
 
-    def optimize(self, fitness_function):
+    def optimize(self, fitness_function=None):
         pass
     
     def _check_n_individuals(self, options, class_name, n_individuals=1):
