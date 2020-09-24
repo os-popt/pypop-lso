@@ -90,6 +90,12 @@ class GENITOR(PopulationOptimizer):
             if best_so_far_y > y:
                 best_so_far_x = np.copy(x)
                 best_so_far_y = np.copy(y)
+            if self.save_best_so_far_x:
+                if n_evaluations == 1:
+                    history_x = np.hstack((n_evaluations, best_so_far_x))
+                elif not(n_evaluations % self.freq_best_so_far_x):
+                    history_x = np.vstack((history_x,
+                        np.hstack((n_evaluations, best_so_far_x))))
             
             # check two termination criteria
             runtime = time.time() - start_optimization
@@ -107,6 +113,9 @@ class GENITOR(PopulationOptimizer):
         else:
             fitness_data = None
             time_compression = None
+        
+        if self.save_best_so_far_x:
+            np.savetxt(self.txt_best_so_far_x, history_x)
         
         results = {"best_so_far_x": best_so_far_x,
             "best_so_far_y": best_so_far_y,
