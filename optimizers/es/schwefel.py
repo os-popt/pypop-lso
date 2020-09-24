@@ -36,6 +36,7 @@ class Schwefel(OnePlusOne):
         n_evaluations_restart = 1 # counter of fitness evaluations for each re-start
         best_so_far_x, best_so_far_y = np.copy(x), np.copy(y) # best-so-far solution and fitness
         parent_x, parent_y = np.copy(x), np.copy(y) # for each re-start
+        history_x = np.hstack((n_evaluations, best_so_far_x))
 
         if self.save_fitness_data:
             fitness_data = [y]
@@ -63,6 +64,10 @@ class Schwefel(OnePlusOne):
                     step_size = self.step_size
                     if best_so_far_y > y:
                         best_so_far_x, best_so_far_y = np.copy(x), np.copy(y)
+                    if self.save_best_so_far_x:
+                        if not(n_evaluations % self.freq_best_so_far_x):
+                            history_x = np.vstack((history_x,
+                                np.hstack((n_evaluations, best_so_far_x))))
                     if self.save_fitness_data:
                         fitness_data.append(y)
                 is_restart = False
@@ -95,6 +100,10 @@ class Schwefel(OnePlusOne):
             # update best-so-far x and y
             if best_so_far_y > y:
                 best_so_far_x, best_so_far_y = np.copy(x), np.copy(y)
+            if self.save_best_so_far_x:
+                if not(n_evaluations % self.freq_best_so_far_x):
+                    history_x = np.vstack((history_x,
+                        np.hstack((n_evaluations, best_so_far_x))))
             
             # check re-start condition
             if step_size <= self.threshold_step_size:
@@ -116,7 +125,10 @@ class Schwefel(OnePlusOne):
         else:
             fitness_data = None
             time_compression = None
-
+        
+        if self.save_best_so_far_x:
+            np.savetxt(self.txt_best_so_far_x, history_x)
+        
         results = {"best_so_far_x": best_so_far_x,
                    "best_so_far_y": best_so_far_y,
                    "n_evaluations": n_evaluations,
