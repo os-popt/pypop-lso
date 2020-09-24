@@ -41,6 +41,7 @@ class Ostermeier(MuCommaLambda):
         time_evaluations = time.time() - start_evaluation
         n_evaluations = 1
         best_so_far_x, best_so_far_y = np.copy(parent), np.copy(y)
+        history_x = np.hstack((n_evaluations, best_so_far_x))
         Y = np.tile(y, (self.n_individuals,)) # fitness of population
         
         if self.save_fitness_data:
@@ -78,7 +79,11 @@ class Ostermeier(MuCommaLambda):
                 # update best-so-far x and y
                 if best_so_far_y > Y[k]:
                     best_so_far_x, best_so_far_y = np.copy(X[k, :]), np.copy(Y[k])
-                
+                if self.save_best_so_far_x:
+                    if not(n_evaluations % self.freq_best_so_far_x):
+                        history_x = np.vstack((history_x,
+                            np.hstack((n_evaluations, best_so_far_x))))
+
                 # check three termination criteria
                 if n_evaluations >= self.max_evaluations:
                     break
@@ -110,7 +115,10 @@ class Ostermeier(MuCommaLambda):
         else:
             fitness_data = None
             time_compression = None
-
+        
+        if self.save_best_so_far_x:
+            np.savetxt(self.txt_best_so_far_x, history_x)
+        
         results = {"best_so_far_x": best_so_far_x,
             "best_so_far_y": best_so_far_y,
             "n_evaluations": n_evaluations,
