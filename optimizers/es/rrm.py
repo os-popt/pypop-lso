@@ -46,6 +46,7 @@ class RestartRm(MuCommaLambda):
         n_evaluations = 1
         best_so_far_x = np.copy(m)
         best_so_far_y = np.copy(y)
+        history_x = np.hstack((n_evaluations, best_so_far_x))
         
         if self.save_fitness_data:
             fitness_data = [y]
@@ -70,7 +71,11 @@ class RestartRm(MuCommaLambda):
                     if best_so_far_y > y:
                         best_so_far_x = np.copy(m)
                         best_so_far_y = np.copy(y)
-        
+                    if self.save_best_so_far_x:
+                        if not(n_evaluations % self.freq_best_so_far_x):
+                            history_x = np.vstack((history_x,
+                                np.hstack((n_evaluations, best_so_far_x))))
+                    
                     if self.save_fitness_data:
                         fitness_data.append(np.copy(y))
 
@@ -120,6 +125,10 @@ class RestartRm(MuCommaLambda):
                 if best_so_far_y > y:
                     best_so_far_x = np.copy(X[i, :])
                     best_so_far_y = np.copy(y)
+                if self.save_best_so_far_x:
+                    if not(n_evaluations % self.freq_best_so_far_x):
+                        history_x = np.vstack((history_x,
+                            np.hstack((n_evaluations, best_so_far_x))))
                 
                 # check three termination criteria
                 if n_evaluations >= self.max_evaluations:
@@ -184,6 +193,9 @@ class RestartRm(MuCommaLambda):
             fitness_data = None
             time_compression = None
         
+        if self.save_best_so_far_x:
+            np.savetxt(self.txt_best_so_far_x, history_x)
+
         results = {"best_so_far_x": best_so_far_x,
             "best_so_far_y": best_so_far_y,
             "n_evaluations": n_evaluations,
