@@ -55,27 +55,28 @@ class Ostermeier(MuCommaLambda):
         termination = "max_evaluations"
         is_restart, n_restart = True, 0
         while n_evaluations < self.max_evaluations:
-            if is_restart and (n_restart > 0):
-                parent = self.rng.uniform(
-                    self.lower_boundary, self.upper_boundary, (self.ndim_problem, ))
-                start_evaluation = time.time()
-                y = fitness_function(parent)
-                time_evaluations += (time.time() - start_evaluation)
-                n_evaluations += 1
-                if best_so_far_y > y:
-                    best_so_far_x = np.copy(parent)
-                    best_so_far_y = np.copy(y)
-                if self.save_best_so_far_x:
-                    if not (n_evaluations % self.freq_best_so_far_x):
-                        history_x = np.vstack((history_x,
-                            np.hstack((n_evaluations, best_so_far_x))))
-
-                if self.save_fitness_data:
-                    fitness_data.append(np.copy(y))
-
-                self.n_individuals *= 2
-                if self.n_individuals >= 1000:
-                    self.n_individuals = 1000
+            if is_restart:
+                if n_restart > 0:
+                    parent = self.rng.uniform(
+                        self.lower_boundary, self.upper_boundary, (self.ndim_problem, ))
+                    start_evaluation = time.time()
+                    y = fitness_function(parent)
+                    time_evaluations += (time.time() - start_evaluation)
+                    n_evaluations += 1
+                    if best_so_far_y > y:
+                        best_so_far_x = np.copy(parent)
+                        best_so_far_y = np.copy(y)
+                    if self.save_best_so_far_x:
+                        if not (n_evaluations % self.freq_best_so_far_x):
+                            history_x = np.vstack((history_x,
+                                np.hstack((n_evaluations, best_so_far_x))))
+                    
+                    if self.save_fitness_data:
+                        fitness_data.append(np.copy(y))
+                    
+                    self.n_individuals *= 2
+                    if self.n_individuals >= 1000:
+                        self.n_individuals = 1000
                 
                 Y = np.tile(y, (self.n_individuals,))  # fitness of population
                 X = np.empty((self.n_individuals, self.ndim_problem))  # population
