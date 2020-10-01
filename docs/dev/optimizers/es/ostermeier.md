@@ -37,4 +37,8 @@ We try our best to repeat numerical experiments of the original paper, though no
 
 ![Figure 3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ostermeier/Ostermeier-Figure-3.png)
 
+**Figure 4**
+
+![Figure 4](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ostermeier/Ostermeier-Figure-4.png)
+
 .......
