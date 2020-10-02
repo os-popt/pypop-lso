@@ -96,3 +96,37 @@ plt.ylabel("best function value")
 plt.yscale("log")
 plt.yticks(np.logspace(-6, 1, 8))
 plt.savefig("Ostermeier-Figure-4.png")
+
+# Figure 5
+def sum_different_powers(x):
+    x = _transform_and_check(x)
+    y = np.sum(np.power(np.abs(x), np.arange(2, x.size + 2)))
+    return y
+
+ndim_problem = 30
+problem = {"ndim_problem": ndim_problem,
+    "lower_boundary": -1 * np.ones((ndim_problem,)), # not given
+    "upper_boundary": 1 * np.ones((ndim_problem,))} # not given
+options = {"max_evaluations": 1e5,
+    "n_parents": n_parents,
+    "n_individuals": n_individuals,
+    "initial_guess": np.ones((ndim_problem,)),
+    "step_size": 0.3, # not given
+    "threshold_fitness": 1e-30,
+    "threshold_step_size": 0, # not given
+    "seed": 20201002} # not given
+solver = Ostermeier(problem, options)
+results = solver.optimize(sum_different_powers)
+print(results)
+fitness_data = results["fitness_data"]
+plt.figure(5)
+plt.plot(fitness_data[:, 0], fitness_data[:, 1])
+plt.title("Ostermeier's ES on Sum of Different Powers")
+plt.xlabel("function evaluations")
+xticks = np.linspace(0, options["max_evaluations"], 6)
+xticks_label = ("{:.1E}".format(x) for x in xticks)
+plt.xticks(xticks, xticks_label)
+plt.ylabel("best function value")
+plt.yscale("log")
+plt.yticks(np.logspace(-30, 0, 4))
+plt.savefig("Ostermeier-Figure-5.png")
