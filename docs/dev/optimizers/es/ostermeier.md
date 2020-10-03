@@ -45,4 +45,7 @@ We try our best to repeat numerical experiments of the original paper, though no
 
 ![Figure 5](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ostermeier/Ostermeier-Figure-5.png)
 
+Here, we do not plot **Figure 7** owing to the relative complexity of the underlying optimization problem called Steiner-Net. Indeed, it is time-consuming to construct the cost function of Steiner-Net according to Figure 6.
+
 .......
+
