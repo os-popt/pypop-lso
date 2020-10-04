@@ -42,6 +42,43 @@ plt.yscale("log")
 plt.yticks(np.logspace(-10, 4, 15))
 plt.savefig("Ostermeier-Figure-1.png")
 
+# Figure 2
+ndim_problem = [10, 30, 100]
+dim_marker = ["o", "s", "^"]
+beta_scal = [[0, 1e-3, 3e-3, 1e-2, 3e-2, 5e-2, 1e-1, 2e-1, 3e-1, 5e-1, 1],
+    [0, 1e-3, 3e-3, 1e-2, 2e-2, 3e-2, 5e-2, 1e-1, 2e-1],
+    [0, 1e-3, 3e-3, 5e-3, 1e-2, 2e-2, 3e-2, 5e-2]]
+plt.figure(2)
+for i in range(len(ndim_problem)):
+    n_evaluations = np.empty((len(beta_scal[i]),))
+    for j in range(len(beta_scal[i])):
+        problem = {"ndim_problem": ndim_problem[i],
+            "lower_boundary": -10 * np.ones((ndim_problem[i],)), # not given
+            "upper_boundary": 10 * np.ones((ndim_problem[i],))} # not given
+        options = {"max_evaluations": 1e7,
+            "n_parents": n_parents,
+            "n_individuals": n_individuals,
+            "initial_guess": np.ones((ndim_problem[i],)),
+            "step_size": 0.3, # not given
+            "threshold_fitness": 1e-10,
+            "seed": 20200929} # not given
+        options["beta_scal"] = beta_scal[i][j]
+        solver = Ostermeier(problem, options)
+        results = solver.optimize(hyper_ellipsoid)
+        n_evaluations[j] = results["n_evaluations"]
+    plt.plot(beta_scal[i], n_evaluations,
+        marker=dim_marker[i], c="black")
+plt.title("Ostermeier's ES on Hyper-Ellipsoid")
+plt.legend(ndim_problem)
+plt.xlabel("beta_scal")
+plt.xscale("log")
+xticks = list(np.logspace(-3, 0, 4))
+plt.xticks(xticks.insert(0, 0))
+plt.ylabel("function evaluations")
+plt.yscale("log")
+plt.yticks(np.logspace(3, 7, 5))
+plt.savefig("Ostermeier-Figure-2.png")
+
 # Figure 3
 ndim_problem = 20
 problem = {"ndim_problem": ndim_problem,
