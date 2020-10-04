@@ -23,6 +23,7 @@ class Ostermeier(MuCommaLambda):
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "Ostermeier (Ostermeier's (1,lambda)-ES)")
         MuCommaLambda.__init__(self, problem, options)
+        self.beta_scal = options.get("beta_scal", 1 / self.ndim_problem)
 
     def optimize(self, fitness_function=None):
         start_optimization = time.time()
@@ -48,7 +49,7 @@ class Ostermeier(MuCommaLambda):
 
         # initialize variables involved for all individuals
         beta = np.sqrt(1 / self.ndim_problem) # adaptation vs precision
-        beta_scal = 1 / self.ndim_problem # in the range (0, 1)
+        beta_scal = self.beta_scal # in the range (0, 1)
         # beta_scal: small values facilitate a precise but time-consuming adaptaton
 
         # iterate
