@@ -29,9 +29,15 @@ For ES, the self-adaptation of **individual** step-sizes (versus the *global* st
 
 We try our best to repeat numerical experiments of the original paper, though not always successful. See the easy-to-run [source code](https://github.com/os-popt/pypop-lso/blob/master/test/optimizers/es/ostermeier/repeat_experiments.py) for checking and/or improving them.
 
+Luckily, we succeeded to repeat Figure 1-5 of the original paper, as presented blow. 
+
 **Figure 1**
 
 ![Figure 1](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ostermeier/Ostermeier-Figure-1.png)
+
+**Figure 2**
+
+![Figure 2](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ostermeier/Ostermeier-Figure-2.png)
 
 **Figure 3**
 
