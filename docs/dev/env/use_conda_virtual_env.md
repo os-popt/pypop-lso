@@ -1,6 +1,8 @@
 # Use Conda's Virtual Environment
 
-It is **strongly suggested** to create and use [conda's virtual environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for development of the `pypop-lso` library, as presented below:
+It is **strongly suggested** to create and use [conda's virtual environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) for developing the `pypop-lso` library, as presented below:
+
+## On Windows 10
 
 ```bash
 $ conda create --prefix virtual_env
@@ -24,3 +26,4 @@ Python 3.7.6 (default, Jan  8 2020, 20:23:39)
 $ conda deactivate
 ```
 
+## On Linux
