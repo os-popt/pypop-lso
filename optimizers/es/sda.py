@@ -38,11 +38,7 @@ class SDA(MuCommaLambda):
             fitness_function = self.fitness_function
 
         # initialize
-        if self._X.ndim == 1:
-            m = np.copy(self._X)
-        else:
-            m = np.copy(self._X[0, :]) # discard all other individuals
-        self._X = None # clear
+        m = MuCommaLambda._get_m(self)
         start_evaluation = time.time()
         y = fitness_function(m)
         n_evaluations, time_evaluations = 1, time.time() - start_evaluation
@@ -97,8 +93,7 @@ class SDA(MuCommaLambda):
 
                 # update best-so-far x and y
                 if best_so_far_y > y:
-                    best_so_far_x = np.copy(X[i, :])
-                    best_so_far_y = np.copy(y)
+                    best_so_far_x, best_so_far_y = np.copy(X[i, :]), np.copy(y)
                 if self.save_best_so_far_x:
                     if not(n_evaluations % self.freq_best_so_far_x):
                         history_x = np.vstack((history_x,
@@ -153,9 +148,11 @@ class SDA(MuCommaLambda):
             fitness_data = compress_fitness_data(fitness_data, self.len_fitness_data)
             time_compression = time.time() - start_compression
         else:
-            fitness_data = None
-            time_compression = None
+            fitness_data, time_compression = None, None
 
+        if self.save_best_so_far_x:
+            np.savetxt(self.txt_best_so_far_x, history_x)
+        
         results = {"best_so_far_x": best_so_far_x,
             "best_so_far_y": best_so_far_y,
             "n_evaluations": n_evaluations,
