@@ -36,3 +36,11 @@ class MuCommaLambda(EvolutionStrategy):
             print("the option 'n_parents' should >= 1, and it has been reset to 1.")
         if self.n_parents > self.n_individuals:
             raise ValueError("the option 'n_parents' should <= the option 'n_individuals'.")
+    
+    def _get_m(self):
+        if self._X.ndim == 1:
+            m = np.copy(self._X)
+        else:
+            m = np.copy(self._X[0, :]) # discard all other individuals
+        self._X = None # clear
+        return m
