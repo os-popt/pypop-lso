@@ -82,8 +82,7 @@ class Experiment(object):
         self.datafile_prefix = "env_{}_opt_{}_maxeval_{}".format(
             self.env_name, self.optimizer.__name__, self.optimizer_options["max_evaluations"])
         
-        self.optimizer_options["txt_best_so_far_x"] =\
-            "{}/{}_history_best_so_far_x_{}.txt".format(
+        self.optimizer_options["txt_best_so_far_x"] ="{}/{}_history_best_so_far_x_{}.txt".format(
                 self.data_dir, self.datafile_prefix, self.datafile_suffix)
     
     def _save_train_results(self, results):
