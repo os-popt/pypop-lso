@@ -65,15 +65,13 @@ class Experiment(object):
         self.env_ndim_actions = self.env.action_space.shape[0]
 
         # set problem (policy) parameters
-        self.lower_boundary = params["problem_lower_boundary"]
-        self.upper_boundary = params["problem_upper_boundary"]
         self.is_tanh = params["is_tanh"]
 
         self.policy, self.separators, self.ndim_problem =\
             _get_policy(self.env_ndim_observation, self.env_ndim_actions, self.is_tanh)
         self.problem = {"ndim_problem": self.ndim_problem,
-            "lower_boundary": self.lower_boundary * np.ones(self.ndim_problem),
-            "upper_boundary": self.upper_boundary * np.ones(self.ndim_problem)}
+            "lower_boundary": params["problem_lower_boundary"] * np.ones(self.ndim_problem),
+            "upper_boundary": params["problem_upper_boundary"] * np.ones(self.ndim_problem)}
         
         # set experiment parameters
         self.n_repeat = params["n_repeat"]
@@ -82,17 +80,17 @@ class Experiment(object):
 
     def plot(self):
         # set the reward function
-        env, len_episode = self.env, self.env_len_episode
-        is_same_env = self.is_same_env
+        env, len_episode, is_same_env = self.env, self.env_len_episode, self.is_same_env
         rng = np.random.default_rng(self.seed)
         env_seed, sampling_seed = rng.integers(0, np.iinfo(np.int32).max, 2)
         policy, separators = self.policy, self.separators
         def _reward(w, is_same_env):
+            seed = int(env_seed)
             if not hasattr(_reward, "rng"):
-                _reward.rng = np.random.default_rng(env_seed)
+                _reward.rng = np.random.default_rng(seed)
             if not is_same_env:
-                env_seed = int(_reward.rng.integers(0, np.iinfo(np.int32).max))
-            env.seed(env_seed)
+                seed = int(_reward.rng.integers(0, np.iinfo(np.int32).max))
+            env.seed(seed)
             return _reward_func(w, env, len_episode, policy, separators)
         # sample in the randomized 2-d subspace
         sampling_rng = np.random.default_rng(sampling_seed)
@@ -101,12 +99,12 @@ class Experiment(object):
         X, Y = np.meshgrid(x, y)
         Z = np.zeros_like(X)
         x_dim, y_dim = sampling_rng.choice(self.ndim_problem, 2, replace=False)
-        w = sampling_rng.uniform(self.lower_boundary, self.upper_boundary)
+        w = sampling_rng.uniform(self.problem["lower_boundary"], self.problem["upper_boundary"])
         for r in range(self.n_repeat):
             for i in range(X.shape[0]):
                 for j in range(X.shape[1]):
-                    w[x_dim] = x[i]
-                    w[y_dim] = y[j]
+                    w[x_dim] = X[i, j]
+                    w[y_dim] = Y[i, j]
                     Z[i, j] = _reward(w, is_same_env)
         Z /= self.n_repeat
         fig = plt.figure()
