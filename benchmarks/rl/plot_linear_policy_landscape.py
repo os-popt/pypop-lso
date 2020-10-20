@@ -75,6 +75,7 @@ class Experiment(object):
         
         # set experiment parameters
         self.n_repeat = params["n_repeat"]
+        self.freq_sampling = params["freq_sampling"]
 
         self.data_dir = "./env_{}".format(self.env_name)
 
@@ -94,11 +95,11 @@ class Experiment(object):
             return _reward_func(w, env, len_episode, policy, separators)
         # sample in the randomized 2-d subspace
         sampling_rng = np.random.default_rng(sampling_seed)
-        x = np.linspace(self.problem["lower_boundary"], self.problem["upper_boundary"], 100)
-        y = np.linspace(self.problem["lower_boundary"], self.problem["upper_boundary"], 100)
+        x_dim, y_dim = sampling_rng.choice(self.ndim_problem, 2, replace=False)
+        x = np.linspace(self.problem["lower_boundary"][x_dim], self.problem["upper_boundary"][x_dim], self.freq_sampling)
+        y = np.linspace(self.problem["lower_boundary"][y_dim], self.problem["upper_boundary"][y_dim], self.freq_sampling)
         X, Y = np.meshgrid(x, y)
         Z = np.zeros_like(X)
-        x_dim, y_dim = sampling_rng.choice(self.ndim_problem, 2, replace=False)
         w = sampling_rng.uniform(self.problem["lower_boundary"], self.problem["upper_boundary"])
         for r in range(self.n_repeat):
             for i in range(X.shape[0]):
@@ -135,6 +136,7 @@ if __name__ == "__main__":
     
     # set experiment parameters
     parser.add_argument('--n_repeat', '-nr', type=int, default=1)
+    parser.add_argument('--freq_sampling', '-fs', type=int, default=100)
     
     # parse all parameters
     args = parser.parse_args()
