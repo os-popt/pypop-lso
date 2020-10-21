@@ -78,6 +78,7 @@ class Experiment(object):
         self.freq_sampling = params["freq_sampling"]
 
         self.data_dir = "./env_{}".format(self.env_name)
+        if not os.path.exists(self.data_dir): os.makedirs(self.data_dir)
 
     def plot(self):
         # set the reward function
@@ -106,14 +107,14 @@ class Experiment(object):
                 for j in range(X.shape[1]):
                     w[x_dim] = X[i, j]
                     w[y_dim] = Y[i, j]
-                    Z[i, j] = _reward(w, is_same_env)
+                    Z[i, j] += _reward(w, is_same_env)
         Z /= self.n_repeat
         fig = plt.figure()
         ax = Axes3D(fig)
         ax.plot_surface(X, Y, Z, cmap=plt.cm.cool, alpha=0.9, edgecolor=None)
         plt.title("Optimization Landscape (Max) on 2-d Subspace")
         ax.set_xlabel("Dimension {}".format(x_dim + 1))
-        ax.set_ylabl("Dimension {}".format(y_dim + 1))
+        ax.set_ylabel("Dimension {}".format(y_dim + 1))
         plt.savefig(os.path.join(self.data_dir, "repeat_{}".format(self.n_repeat)))
         plt.close()
 
