@@ -28,7 +28,7 @@ def cigar(x):
     y = x[0] + (10 ** 6) * np.sum(x[1:])
     return y
 
-def discus(x):
+def discus(x): # also called tablet
     x = _transform_and_check(x, True)
     x = np.power(x, 2)
     y = (10 ** 6) * x[0] + np.sum(x[1:])
