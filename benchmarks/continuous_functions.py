@@ -51,6 +51,11 @@ def different_powers(x):
     y = np.sum(np.power(np.abs(x), 2 + 4 * np.linspace(0, 1, x.size)))
     return y
 
+def different_powers_beyer(x):
+    x = _transform_and_check(x, True)
+    y = np.sum(np.power(np.abs(x), 2 + 10 * np.linspace(0, 1, x.size)))
+    return y
+
 def parabolic_ridge(x):
     x = _transform_and_check(x, True)
     y = -x[0] + 100 * np.sum(np.power(x[1:], 2))
