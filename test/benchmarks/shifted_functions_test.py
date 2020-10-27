@@ -68,6 +68,17 @@ BenchmarkTest.check_via_sampling(different_powers, y, start_from=2, is_shifted=T
 BenchmarkTest.check_origin(different_powers, start_from=2, n_samples=100, is_shifted=True)
 print("")
 
+# shifted different_powers_beyer
+y = [[4100, 2, 0, 2, 4100],
+    [4228, 3, 0, 3, 4228],
+    [0, 4, 4, 4, 16790904.7, 16790904.7, 773.8],
+    [0, 5, 5, 5, 244667123.6, 244667123.6, 3449.1],
+    [0, 6, 6, 6, 2186614243, 2186614243, 12343],
+    [0, 7, 7, 7, 13952320477.2, 13952320477.2, 37428.5, 2193648688.5]]
+BenchmarkTest.check_via_sampling(different_powers_beyer, y, start_from=2, is_shifted=True)
+BenchmarkTest.check_origin(different_powers_beyer, start_from=2, n_samples=100, is_shifted=True)
+print("")
+
 # shifted parabolic_ridge
 y = [[402, 101, 0, 99, 398],
     [802, 201, 0, 199, 798],
