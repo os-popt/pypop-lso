@@ -24,9 +24,8 @@ class SDA(MuCommaLambda):
         MuCommaLambda.__init__(self, problem, options)
         # m -> number of search directions (evolution paths)
         self.n_evolution_paths = options.setdefault("n_evolution_paths", 10)
-        ndim_problem = problem["ndim_problem"]
-        self.c_cov = 0.4 / np.sqrt(ndim_problem)
-        self.c_c = 0.25 / np.sqrt(ndim_problem)
+        self.c_cov = 0.4 / np.sqrt(problem["ndim_problem"])
+        self.c_c = 0.25 / np.sqrt(problem["ndim_problem"])
         self.c_s = 0.3
         self.d_sigma = 1
         self.p_star = 0.05
@@ -37,8 +36,8 @@ class SDA(MuCommaLambda):
         if (fitness_function is None) and (self.fitness_function != None):
             fitness_function = self.fitness_function
 
-        # initialize
-        m = MuCommaLambda._get_m(self)
+        # initialize distribution mean
+        m = MuCommaLambda._get_m(self) # distribution mean
         start_evaluation = time.time()
         y = fitness_function(m)
         n_evaluations, time_evaluations = 1, time.time() - start_evaluation
