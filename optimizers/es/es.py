@@ -16,7 +16,7 @@ class EvolutionStrategy(PopulationOptimizer):
             4 + np.floor(3 * np.log(problem["ndim_problem"]))))
         # mu -> n_parents
         self.n_parents = int(options.get("n_parents", np.floor(self.n_individuals / 2)))
-        self.save_global_step_size = options.get("save_global_step_size", False)
+        self.save_step_size_data = options.get("save_step_size_data", False)
 
 class OnePlusOne(EvolutionStrategy):
     def __init__(self, problem, options):
