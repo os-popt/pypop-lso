@@ -63,8 +63,7 @@ class MA(MuCommaLambda):
 
         # iterate
         termination = "max_evaluations"
-        sigma = self.step_size
-        step_size_data = [sigma if self.save_step_size_data else None]
+        sigma, step_size_data = self.step_size, [self.step_size if self.save_step_size_data else None]
         Z = np.empty((self.n_individuals, self.ndim_problem)) # Guassian noise for mutation
         D = np.empty((self.n_individuals, self.ndim_problem)) # search directions
         X = np.empty((self.n_individuals, self.ndim_problem)) # population
