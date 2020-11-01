@@ -65,7 +65,7 @@ class SDA(MuCommaLambda):
         
         # iterate
         termination = "max_evaluations"
-        sigma = self.step_size
+        sigma, step_size_data = self.step_size, [self.step_size if self.save_step_size_data else None]
         x_z1, x_z2 = np.sqrt(1 - self.c_cov), np.sqrt(self.c_cov) # Line 9 of Algorithm 1
         q_1, q_2 = 1 - self.c_c, np.sqrt(self.c_c * (2 - self.c_c)) # Line 15 of Algorithm 1
         RR = np.arange(1, self.n_individuals * 2 + 1)
@@ -141,6 +141,7 @@ class SDA(MuCommaLambda):
             U = R1 - self.n_individuals * (self.n_individuals + 1) / 2
             Z = Z_1 * Z + Z_2 * (U - U_mean) / U_var
             sigma = sigma * np.exp((st.norm.cdf(Z) / (1 - p_star) - 1) / d_sigma)
+            if self.save_step_size_data: step_size_data.append(sigma)
         
         if self.save_fitness_data:
             start_compression = time.time()
@@ -161,5 +162,6 @@ class SDA(MuCommaLambda):
             "time_evaluations": time_evaluations,
             "time_compression": time_compression,
             "m": m,
-            "step_size": sigma}
+            "step_size": sigma,
+            "step_size_data": step_size_data}
         return results
