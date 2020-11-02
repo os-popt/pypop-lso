@@ -79,6 +79,9 @@ def compress_fitness_data(fitness_data, len_fitness_data=2000):
         if fitness_data[index] < fitness_data[index + 1]:
             fitness_data[index + 1] = fitness_data[index]
     
+    if len_fitness_data <= 0:
+        return np.stack((np.arange(1, len(fitness_data) + 1), fitness_data), 1)
+    
     # compress for space saving
     frequency = int(np.ceil(len(fitness_data) / len_fitness_data))
     frequency = max(100, round(frequency, -(len(str(frequency)) - 1)))
