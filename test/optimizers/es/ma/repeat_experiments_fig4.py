@@ -57,11 +57,19 @@ if __name__ == "__main__":
         "upper_boundary": 5.0 * np.ones((params["ndim_problem"],))} # undefined in the paper
     min_evaluations, min_step_size_data = np.inf, np.inf
     for i in range(params["n_trials"]):
+        if params["benchmark_function"] == "rosenbrock": # undefined in the paper
+            initial_guess = -1.0 * np.ones((params["ndim_problem"],))
+        else:
+            initial_guess = np.ones((params["ndim_problem"],))
+        if params["benchmark_function"] in ["parabolic_ridge", "sharp_ridge"]:
+            threshold_fitness = -np.inf
+        else:
+            threshold_fitness = params["threshold_fitness"]
         optimizer_options = {"max_evaluations": params["max_generations"] * n_individuals + 1,
             "seed": params["optimizer_seed"] + i, # undefined in the paper
             "step_size": 1.0,
-            "initial_guess": np.ones((params["ndim_problem"],)),
-            "threshold_fitness": params["threshold_fitness"],
+            "initial_guess": initial_guess,
+            "threshold_fitness": threshold_fitness,
             "len_fitness_data": 0,
             "save_step_size_data": True}
         results_file = os.path.join(data_dir, "{:s}-Dim-{:d}-Trial-{:d}.pickle".format(
@@ -82,18 +90,28 @@ if __name__ == "__main__":
     if params["is_plot"]:
         fitness_data = np.zeros((min_evaluations, 2))
         step_size_data = np.zeros((min_step_size_data))
+        n_stat = 0
         for i in range(params["n_trials"]):
             results_file = os.path.join(data_dir, "{:s}-Dim-{:d}-Trial-{:d}.pickle".format(
                 params["benchmark_function"], params["ndim_problem"], i + 1))
             with open(results_file, "rb") as results_handle:
                 results = pickle.load(results_handle)
-            fitness_data += np.array(results["fitness_data"][:min_evaluations, :])
-            step_size_data += np.array(results["step_size_data"][:min_step_size_data])
-        fitness_data /= params["n_trials"]
-        step_size_data /= params["n_trials"]
+            if params["benchmark_function"] == "rosenbrock":
+                fitness_data_tmp = np.array(results["fitness_data"])
+                if np.min(fitness_data_tmp[:min_evaluations, 1]) > 1e-7:
+                    continue
+            if params["benchmark_function"] in ["parabolic_ridge", "sharp_ridge"]:
+                fitness_data += np.abs(np.array(results["fitness_data"][:min_evaluations, :]))
+                step_size_data += np.abs(np.array(results["step_size_data"][:min_step_size_data]))
+            else:
+                fitness_data += np.array(results["fitness_data"][:min_evaluations, :])
+                step_size_data += np.array(results["step_size_data"][:min_step_size_data])
+            n_stat += 1
+        fitness_data /= n_stat
+        step_size_data /= n_stat
         plt.figure()
         fitness_data = fitness_data[np.arange(0, len(fitness_data), n_individuals), 1]
-        plt.plot(range(len(fitness_data)), fitness_data, color="black")
+        plt.plot(range(len(fitness_data)), fitness_data, color="red")
         plt.plot(range(len(step_size_data)), step_size_data, color="magenta")
         plt.title("{:s} N = {:d}".format(params["benchmark_function"], params["ndim_problem"]))
         plt.xlabel("g")
