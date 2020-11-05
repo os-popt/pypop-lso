@@ -91,6 +91,11 @@ def different_powers(x, rotation_matrix=None):
     y = continuous_functions.different_powers(x)
     return y
 
+def different_powers_beyer(x, rotation_matrix=None):
+    x = _load_rotation_matrix(different_powers_beyer, x, rotation_matrix)
+    y = continuous_functions.different_powers_beyer(x)
+    return y
+
 def parabolic_ridge(x, rotation_matrix=None):
     x = _load_rotation_matrix(parabolic_ridge, x, rotation_matrix)
     y = continuous_functions.parabolic_ridge(x)
