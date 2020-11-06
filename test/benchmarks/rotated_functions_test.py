@@ -31,6 +31,11 @@ BenchmarkTest.check_origin(different_powers,
     start_from=2, end_with=1000, n_samples=10, is_rotated=True)
 print("")
 
+# rotated different_powers_beyer
+BenchmarkTest.check_origin(different_powers_beyer,
+    start_from=2, end_with=1000, n_samples=10, is_rotated=True)
+print("")
+
 # rotated parabolic_ridge
 BenchmarkTest.check_origin(parabolic_ridge,
     start_from=2, end_with=1000, n_samples=10, is_rotated=True)
