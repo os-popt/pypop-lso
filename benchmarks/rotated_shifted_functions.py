@@ -49,6 +49,11 @@ def different_powers(x):
     y = continuous_functions.different_powers(x)
     return y
 
+def different_powers_beyer(x):
+    x = _load_rotation_and_shift(different_powers_beyer, x)
+    y = continuous_functions.different_powers_beyer(x)
+    return y
+
 def parabolic_ridge(x):
     x = _load_rotation_and_shift(parabolic_ridge, x)
     y = continuous_functions.parabolic_ridge(x)
