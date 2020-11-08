@@ -1,5 +1,25 @@
+import time
 import numpy as np
 
+
+def compress_fitness_data(fitness_data, len_fitness_data=2000):
+    # converge in non-increasing order
+    fitness_data = np.array(fitness_data)
+    for index in range(len(fitness_data) - 1):
+        if fitness_data[index] < fitness_data[index + 1]:
+            fitness_data[index + 1] = fitness_data[index]
+    
+    if len_fitness_data <= 0:
+        return np.stack((np.arange(1, len(fitness_data) + 1), fitness_data), 1)
+    
+    # compress for space saving
+    frequency = int(np.ceil(len(fitness_data) / len_fitness_data))
+    frequency = max(100, round(frequency, -(len(str(frequency)) - 1)))
+    index = np.append(np.arange(0, len(fitness_data) - 1, frequency), len(fitness_data) - 1)
+    fitness_data = fitness_data[index]
+    index[0], index[len(index) - 1] = index[0] + 1, index[len(index) - 1] + 1 # 1-based index
+    fitness_data = np.stack((index, fitness_data), 1)
+    return fitness_data
 
 class Optimizer(object):
     """The base class of all optimizers for real-valued, black-box minimization."""
@@ -47,6 +67,23 @@ class Optimizer(object):
             print("For {}, 'n_individuals' is reset to {:d} by default (from {:d}).".format(
                 class_name, n_individuals, options.get("n_individuals")))
             options["n_individuals"] = n_individuals
+    
+    def _check_terminations(self, n_evaluations, runtime, best_so_far_y):
+        if n_evaluations >= self.max_evaluations: return True, "max_evaluations"
+        if runtime >= self.max_runtime: return True, "max_runtime"
+        if best_so_far_y <= self.threshold_fitness: return True, "threshold_fitness"
+        return False, "no_termination"
+    
+    def _save_data(self, history_x, fitness_data):
+        if self.save_best_so_far_x: np.savetxt(self.txt_best_so_far_x, history_x)
+
+        if self.save_fitness_data:
+            start_compression = time.time()
+            fitness_data = compress_fitness_data(fitness_data, self.len_fitness_data)
+            time_compression = time.time() - start_compression
+        else:
+            fitness_data, time_compression = None, None
+        return fitness_data, time_compression
 
     def __repr__(self):
         tip = "NOTE that the optimizer'name to be printed is not set. " +\
@@ -71,22 +108,3 @@ class PopulationOptimizer(Optimizer):
                 self._X_size)
         else:
             self._X = self.initial_guess
-
-def compress_fitness_data(fitness_data, len_fitness_data=2000):
-    # converge in non-increasing order
-    fitness_data = np.array(fitness_data)
-    for index in range(len(fitness_data) - 1):
-        if fitness_data[index] < fitness_data[index + 1]:
-            fitness_data[index + 1] = fitness_data[index]
-    
-    if len_fitness_data <= 0:
-        return np.stack((np.arange(1, len(fitness_data) + 1), fitness_data), 1)
-    
-    # compress for space saving
-    frequency = int(np.ceil(len(fitness_data) / len_fitness_data))
-    frequency = max(100, round(frequency, -(len(str(frequency)) - 1)))
-    index = np.append(np.arange(0, len(fitness_data) - 1, frequency), len(fitness_data) - 1)
-    fitness_data = fitness_data[index]
-    index[0], index[len(index) - 1] = index[0] + 1, index[len(index) - 1] + 1 # 1-based index
-    fitness_data = np.stack((index, fitness_data), 1)
-    return fitness_data
