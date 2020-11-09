@@ -6,10 +6,10 @@ nohup python repeat_experiments_fig4.py -bf=discus -ndp=3 -tf=1e-15 -mg=250 >dis
 nohup python repeat_experiments_fig4.py -bf=discus -ndp=30 -tf=1e-15 -mg=2500 >discus_30.out 2>&1 &
 nohup python repeat_experiments_fig4.py -bf=ellipsoid -ndp=3 -tf=1e-15 -mg=250 >ellipsoid_3.out 2>&1 &
 nohup python repeat_experiments_fig4.py -bf=ellipsoid -ndp=30 -tf=1e-15 -mg=3000 >ellipsoid_30.out 2>&1 &
-nohup python repeat_experiments_fig4.py -bf=parabolic_ridge -ndp=3 -tf=1e-1 -mg=100 >parabolic_ridge_3.out 2>&1 &
-nohup python repeat_experiments_fig4.py -bf=parabolic_ridge -ndp=30 -tf=1e-2 -mg=600 >parabolic_ridge_30.out 2>&1 &
-nohup python repeat_experiments_fig4.py -bf=sharp_ridge -ndp=3 -tf=1e-8 -mg=600 -nt=200 >sharp_ridge_3.out 2>&1 &
-nohup python repeat_experiments_fig4.py -bf=sharp_ridge -ndp=30 -tf=1e-10 -mg=800 >sharp_ridge_30.out 2>&1 &
+nohup python repeat_experiments_fig4.py -bf=parabolic_ridge -ndp=3 -tf=-1e10 -mg=100 >parabolic_ridge_3.out 2>&1 &
+nohup python repeat_experiments_fig4.py -bf=parabolic_ridge -ndp=30 -tf=-1e10 -mg=600 >parabolic_ridge_30.out 2>&1 &
+nohup python repeat_experiments_fig4.py -bf=sharp_ridge -ndp=3 -tf=-1e10 -mg=600 -nt=200 >sharp_ridge_3.out 2>&1 &
+nohup python repeat_experiments_fig4.py -bf=sharp_ridge -ndp=30 -tf=-1e10 -mg=800 >sharp_ridge_30.out 2>&1 &
 nohup python repeat_experiments_fig4.py -bf=rosenbrock -ndp=3 -tf=1e-10 -mg=200 -nt=100 >rosenbrock_3.out 2>&1 &
 nohup python repeat_experiments_fig4.py -bf=rosenbrock -ndp=30 -tf=1e-12 -mg=3500 >rosenbrock_30.out 2>&1 &
 nohup python repeat_experiments_fig4.py -bf=different_powers_beyer -ndp=3 -tf=1e-14 -mg=180 >different_powers_beyer_3.out 2>&1 &

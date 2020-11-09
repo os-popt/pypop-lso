@@ -62,7 +62,7 @@ if __name__ == "__main__":
         else:
             initial_guess = np.ones((params["ndim_problem"],))
         if params["benchmark_function"] in ["parabolic_ridge", "sharp_ridge"]:
-            threshold_fitness = -np.inf
+            threshold_fitness = -1e10
         else:
             threshold_fitness = params["threshold_fitness"]
         optimizer_options = {"max_evaluations": params["max_generations"] * n_individuals + 1,
