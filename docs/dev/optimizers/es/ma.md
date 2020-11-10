@@ -21,5 +21,14 @@ https://github.com/NiMlr/High-Dim-ES-RL    (for the Python source code)
 
 ## Numerical Experiments
 
-.......
+The [repetition](https://github.com/os-popt/pypop-lso/blob/master/test/optimizers/es/ma/repeat_experiments_fig4.py) of Fig. 4 is repeated below.
 
+![sphere-Dim-3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/sphere-Dim-3.png)
+
+![sphere-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/sphere-Dim-30.png)
+
+![cigar-Dim-3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/cigar-Dim-3.png)
+
+![cigar-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/cigar-Dim-30.png)
+
+.......
