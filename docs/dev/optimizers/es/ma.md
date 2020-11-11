@@ -31,4 +31,13 @@ The [repetition](https://github.com/os-popt/pypop-lso/blob/master/test/optimizer
 
 ![cigar-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/cigar-Dim-30.png)
 
+![discus-Dim-3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/discus-Dim-3.png)
+
+![discus-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/discus-Dim-30.png)
+
+![ellipsoid-Dim-3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/ellipsoid-Dim-3.png)
+
+![ellipsoid-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/ellipsoid-Dim-30.png)
+
 .......
+
