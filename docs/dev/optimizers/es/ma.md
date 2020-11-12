@@ -39,5 +39,13 @@ The [repetition](https://github.com/os-popt/pypop-lso/blob/master/test/optimizer
 
 ![ellipsoid-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/ellipsoid-Dim-30.png)
 
+![parabolic_ridge-Dim-3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/parabolic_ridge-Dim-3.png)
+
+![parabolic_ridge-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/parabolic_ridge-Dim-30.png)
+
+![sharp_ridge-Dim-3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/sharp_ridge-Dim-3.png)
+
+![sharp_ridge-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/sharp_ridge-Dim-30.png)
+
 .......
 
