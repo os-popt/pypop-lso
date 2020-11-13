@@ -47,5 +47,13 @@ The [repetition](https://github.com/os-popt/pypop-lso/blob/master/test/optimizer
 
 ![sharp_ridge-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/sharp_ridge-Dim-30.png)
 
+![rosenbrock-Dim-3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/rosenbrock-Dim-3.png)
+
+![rosenbrock-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/rosenbrock-Dim-30.png)
+
+![different_powers_beyer-Dim-3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/different_powers_beyer-Dim-3.png)
+
+![different_powers_beyer-Dim-30](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/different_powers_beyer-Dim-30.png)
+
 .......
 
