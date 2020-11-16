@@ -1,7 +1,6 @@
 import time
 import numpy as np
 
-from optimizer import compress_fitness_data
 from es import OnePlusOne
 
 
@@ -27,19 +26,17 @@ class Schwefel(OnePlusOne):
             fitness_function = self.fitness_function
 
         # initialize
-        x = np.copy(self._X) # population with one individual
-        self._X = None # to save memory space
+        x = OnePlusOne._get_m(self) # population with one individual
         start_evaluation = time.time()
         y = fitness_function(x) # evaluate fitness of population
-        time_evaluations = time.time() - start_evaluation # time used for fitness evaluations
-        n_evaluations = 1 # counter of fitness evaluations
+        n_evaluations, time_evaluations = 1, time.time() - start_evaluation
         n_evaluations_restart = 1 # counter of fitness evaluations for each re-start
         best_so_far_x, best_so_far_y = np.copy(x), np.copy(y) # best-so-far solution and fitness
         parent_x, parent_y = np.copy(x), np.copy(y) # for each re-start
-        history_x = np.hstack((n_evaluations, best_so_far_x))
 
-        if self.save_fitness_data:
-            fitness_data = [y]
+        if self.save_fitness_data: fitness_data = [y]
+        if self.save_best_so_far_x: history_x = np.hstack((n_evaluations, best_so_far_x))
+        else: history_x = None
 
         # initilize parameters for step_size adjustment
         increase_ratio, decrease_ratio = 1 / 0.82, 0.82 # ratio to increase/decrease step_size
@@ -62,14 +59,10 @@ class Schwefel(OnePlusOne):
                     parent_x, parent_y = np.copy(x), np.copy(y)
                     n_success = 0
                     step_size = self.step_size
-                    if best_so_far_y > y:
-                        best_so_far_x, best_so_far_y = np.copy(x), np.copy(y)
-                    if self.save_best_so_far_x:
-                        if not(n_evaluations % self.freq_best_so_far_x):
-                            history_x = np.vstack((history_x,
-                                np.hstack((n_evaluations, best_so_far_x))))
-                    if self.save_fitness_data:
-                        fitness_data.append(y)
+                    if best_so_far_y > y: best_so_far_x, best_so_far_y = np.copy(x), np.copy(y)
+                    if self.save_best_so_far_x and not(n_evaluations % self.freq_best_so_far_x):
+                        history_x = np.vstack((history_x, np.hstack((n_evaluations, best_so_far_x))))
+                    if self.save_fitness_data: fitness_data.append(y)
                 is_restart = False
             else:
                 # adjust step_size every `ndim_problem` mutations (via the 1/5 success rule)
@@ -90,53 +83,37 @@ class Schwefel(OnePlusOne):
             n_evaluations += 1
             n_evaluations_restart += 1
 
-            if self.save_fitness_data:
-                fitness_data.append(y)
+            if self.save_fitness_data: fitness_data.append(y)
 
             if parent_y > y:
                 parent_x, parent_y = np.copy(x), np.copy(y)
                 n_success += 1
             
             # update best-so-far x and y
-            if best_so_far_y > y:
-                best_so_far_x, best_so_far_y = np.copy(x), np.copy(y)
-            if self.save_best_so_far_x:
-                if not(n_evaluations % self.freq_best_so_far_x):
-                    history_x = np.vstack((history_x,
-                        np.hstack((n_evaluations, best_so_far_x))))
+            if best_so_far_y > y: best_so_far_x, best_so_far_y = np.copy(x), np.copy(y)
+            if self.save_best_so_far_x and not(n_evaluations % self.freq_best_so_far_x):
+                history_x = np.vstack((history_x, np.hstack((n_evaluations, best_so_far_x))))
             
+            # check three termination criteria
+            runtime = time.time() - start_optimization
+            is_break, termination = OnePlusOne._check_terminations(
+                    self, n_evaluations, runtime, best_so_far_y)
+            if is_break: break
+
             # check re-start condition
             if step_size <= self.threshold_step_size:
                 is_restart, n_restart = True, n_restart + 1
-            
-            # check two termination criteria
-            runtime = time.time() - start_optimization
-            if runtime >= self.max_runtime:
-                termination = "max_runtime"
-                break
-            if best_so_far_y <= self.threshold_fitness:
-                termination = "threshold_fitness"
-                break
 
-        if self.save_fitness_data:
-            start_compression = time.time()
-            fitness_data = compress_fitness_data(fitness_data, self.len_fitness_data)
-            time_compression = time.time() - start_compression
-        else:
-            fitness_data = None
-            time_compression = None
-        
-        if self.save_best_so_far_x:
-            np.savetxt(self.txt_best_so_far_x, history_x)
+        fitness_data, time_compression = OnePlusOne._save_data(self, history_x, fitness_data)
         
         results = {"best_so_far_x": best_so_far_x,
-                   "best_so_far_y": best_so_far_y,
-                   "n_evaluations": n_evaluations,
-                   "runtime": runtime,
-                   "fitness_data": fitness_data,
-                   "termination": termination,
-                   "time_evaluations": time_evaluations,
-                   "time_compression": time_compression,
-                   "step_size": step_size,
-                   "n_restart": n_restart}
+            "best_so_far_y": best_so_far_y,
+            "n_evaluations": n_evaluations,
+            "runtime": runtime,
+            "fitness_data": fitness_data,
+            "termination": termination,
+            "time_evaluations": time_evaluations,
+            "time_compression": time_compression,
+            "step_size": step_size,
+            "n_restart": n_restart}
         return results
