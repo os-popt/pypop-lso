@@ -1,7 +1,6 @@
 import time
 import numpy as np
 
-from optimizer import compress_fitness_data
 from es import MuCommaLambda
 
 
@@ -18,9 +17,8 @@ class RankOne(MuCommaLambda):
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "RankOne (R1-ES)")
         MuCommaLambda.__init__(self, problem, options)
-        ndim_problem = problem["ndim_problem"]
-        self.c_cov = 1 / (3 * np.sqrt(ndim_problem) + 5)
-        self.c_c = 2 / (ndim_problem + 7)
+        self.c_cov = 1 / (3 * np.sqrt(problem["ndim_problem"]) + 5)
+        self.c_c = 2 / (problem["ndim_problem"] + 7)
         self.q_star = 0.3
         self.c_s = 0.3
         self.d_sigma = 1
@@ -32,23 +30,17 @@ class RankOne(MuCommaLambda):
             fitness_function = self.fitness_function
         
         # initialize
-        if self._X.ndim == 1:
-            m = np.copy(self._X)
-        else:
-            m = np.copy(self._X[0, :]) # discard all other individuals
-        self._X = None # clear
+        m = MuCommaLambda._get_m(self)
         start_evaluation = time.time()
         y = fitness_function(m)
-        time_evaluations = time.time() - start_evaluation
-        n_evaluations = 1
-        best_so_far_x = np.copy(m)
-        best_so_far_y = np.copy(y)
-        history_x = np.hstack((n_evaluations, best_so_far_x))
+        n_evaluations, time_evaluations = 1, time.time() - start_evaluation
+        best_so_far_x, best_so_far_y = np.copy(m), np.copy(y)
         Y = np.tile(y, (self.n_individuals,)) # fitness of population
         
-        if self.save_fitness_data:
-            fitness_data = [y]
-        
+        if self.save_fitness_data: fitness_data = [y]
+        if self.save_best_so_far_x: history_x = np.hstack((n_evaluations, best_so_far_x))
+        else: history_x = None
+
         # set weights for parents
         w = np.log(np.arange(1, self.n_parents + 1))
         w = (np.log(self.n_parents + 1) - w) / (
@@ -58,16 +50,14 @@ class RankOne(MuCommaLambda):
         
         # iterate
         termination = "max_evaluations"
-        m_c1 = np.sqrt(1 - self.c_cov)
-        m_c2 = np.sqrt(self.c_cov)
+        m_c1, m_c2 = np.sqrt(1 - self.c_cov), np.sqrt(self.c_cov)
         p = np.zeros((self.ndim_problem,))
-        p_c1 = 1 - self.c_c
-        p_c2 = np.sqrt(self.c_c * (2 - self.c_c) * mu_eff)
+        p_c1, p_c2 = 1 - self.c_c, np.sqrt(self.c_c * (2 - self.c_c) * mu_eff)
         RR = np.arange(1, self.n_parents * 2 + 1) # ranks
         s = 0
         sigma = self.step_size
+        X = np.empty((self.n_individuals, self.ndim_problem)) # population
         while n_evaluations < self.max_evaluations:
-            X = np.empty((self.n_individuals, self.ndim_problem)) # population
             Y_bak = np.copy(Y)
             for i in range(self.n_individuals):
                 z = self.rng.standard_normal((self.ndim_problem,))
@@ -79,38 +69,23 @@ class RankOne(MuCommaLambda):
                 n_evaluations += 1
                 Y[i] = y
 
-                if self.save_fitness_data:
-                    fitness_data.append(np.copy(y))
+                if self.save_fitness_data: fitness_data.append(np.copy(y))
                 
                 # update best-so-far x and y
-                if best_so_far_y > y:
-                    best_so_far_x = np.copy(X[i, :])
-                    best_so_far_y = np.copy(y)
-                if self.save_best_so_far_x:
-                    if not(n_evaluations % self.freq_best_so_far_x):
-                        history_x = np.vstack((history_x,
-                            np.hstack((n_evaluations, best_so_far_x))))
+                if best_so_far_y > y: best_so_far_x, best_so_far_y = np.copy(X[i, :]), np.copy(y)
+                if self.save_best_so_far_x and not(n_evaluations % self.freq_best_so_far_x):
+                    history_x = np.vstack((history_x, np.hstack((n_evaluations, best_so_far_x))))
                 
                 # check three termination criteria
-                if n_evaluations >= self.max_evaluations:
-                    break
-                if (time.time() - start_optimization) >= self.max_runtime:
-                    termination = "max_runtime"
-                    break
-                if best_so_far_y <= self.threshold_fitness:
-                    termination = "threshold_fitness"
-                    break
+                is_break, termination = MuCommaLambda._check_terminations(
+                    self, n_evaluations, time.time() - start_optimization, best_so_far_y)
+                if is_break: break
             
             # check four termination criteria
             runtime = time.time() - start_optimization
-            if n_evaluations >= self.max_evaluations:
-                break
-            if runtime >= self.max_runtime:
-                termination = "max_runtime"
-                break
-            if best_so_far_y <= self.threshold_fitness:
-                termination = "threshold_fitness"
-                break
+            is_break, termination = MuCommaLambda._check_terminations(
+                    self, n_evaluations, runtime, best_so_far_y)
+            if is_break: break
             if sigma <= self.threshold_step_size:
                 termination = "threshold_step_size (lower)"
                 break
@@ -132,16 +107,7 @@ class RankOne(MuCommaLambda):
             s = (1 - self.c_s) * s + self.c_s * (q - self.q_star)
             sigma = sigma * np.exp(s / self.d_sigma)
         
-        if self.save_fitness_data:
-            start_compression = time.time()
-            fitness_data = compress_fitness_data(fitness_data, self.len_fitness_data)
-            time_compression = time.time() - start_compression
-        else:
-            fitness_data = None
-            time_compression = None
-        
-        if self.save_best_so_far_x:
-            np.savetxt(self.txt_best_so_far_x, history_x)
+        fitness_data, time_compression = MuCommaLambda._save_data(self, history_x, fitness_data)
         
         results = {"best_so_far_x": best_so_far_x,
             "best_so_far_y": best_so_far_y,
