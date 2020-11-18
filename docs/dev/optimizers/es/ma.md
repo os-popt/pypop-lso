@@ -21,7 +21,7 @@ https://github.com/NiMlr/High-Dim-ES-RL    (for the Python source code)
 
 ## Numerical Experiments
 
-The [repetition](https://github.com/os-popt/pypop-lso/blob/master/test/optimizers/es/ma/repeat_experiments_fig4.py) of Fig. 4 is repeated below.
+The [repetition](https://github.com/os-popt/pypop-lso/blob/master/test/optimizers/es/ma/repeat_experiments_fig4.py) of Fig. 4 is shown below. Note that the best-so-far solution is presented here as the reference of convergence curve (rather than the mean of sampling distribution used in the original paper). Such a subtle difference may explain why here slightly faster convergence is obtained on all test functions. Furthermore, for the 3-d SharpRidge function,  MA-ES shows the nearly same convergence as the CMA-ES (a expected behavior), which is also different from the original paper.
 
 ![sphere-Dim-3](https://raw.githubusercontent.com/os-popt/pypop-lso/master/test/optimizers/es/ma/Fig4/sphere-Dim-3.png)
 
