@@ -27,3 +27,11 @@ $ conda deactivate
 ```
 
 ## On Linux
+
+```bash
+$ conda create --prefix virtual_env
+$ conda activate ./virtual_env
+$ conda install --prefix ./virtual_env/ python=3.7.6
+$ pip install numpy==1.18.1 setuptools==46.1.1 matplotlib==3.2.1
+$ conda deactivate
+```
