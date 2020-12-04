@@ -2,7 +2,6 @@ import time
 import numpy as np
 import scipy.stats as st
 
-from optimizer import compress_fitness_data
 from es import MuCommaLambda
 
 
@@ -44,11 +43,10 @@ class SDA(MuCommaLambda):
         best_so_far_x, best_so_far_y = np.copy(m), np.copy(y)
         Y = np.tile(y, (self.n_individuals,)) # fitness of population
 
-        if self.save_fitness_data:
-            fitness_data = [y]
-        if self.save_best_so_far_x:
-            history_x = np.hstack((n_evaluations, best_so_far_x))
-        
+        if self.save_fitness_data: fitness_data = [y]
+        if self.save_best_so_far_x: history_x = np.hstack((n_evaluations, best_so_far_x))
+        else: history_x = None
+
         # set weights for parents
         w = np.log(np.arange(1, self.n_parents + 1))
         w = (np.log(self.n_parents + 1) - w) / (
@@ -87,37 +85,23 @@ class SDA(MuCommaLambda):
                 n_evaluations += 1
                 Y[i] = y
 
-                if self.save_fitness_data:
-                    fitness_data.append(np.copy(y))
+                if self.save_fitness_data: fitness_data.append(np.copy(y))
 
                 # update best-so-far x and y
-                if best_so_far_y > y:
-                    best_so_far_x, best_so_far_y = np.copy(X[i, :]), np.copy(y)
-                if self.save_best_so_far_x:
-                    if not(n_evaluations % self.freq_best_so_far_x):
-                        history_x = np.vstack((history_x,
-                            np.hstack((n_evaluations, best_so_far_x))))
-
+                if best_so_far_y > y: best_so_far_x, best_so_far_y = np.copy(X[i, :]), np.copy(y)
+                if self.save_best_so_far_x and not(n_evaluations % self.freq_best_so_far_x):
+                    history_x = np.vstack((history_x, np.hstack((n_evaluations, best_so_far_x))))
+                
                 # check three termination criteria
-                if n_evaluations >= self.max_evaluations:
-                    break
-                if (time.time() - start_optimization) >= self.max_runtime:
-                    termination = "max_runtime"
-                    break
-                if best_so_far_y <= self.threshold_fitness:
-                    termination = "threshold_fitness"
-                    break
-
+                is_break, termination = MuCommaLambda._check_terminations(
+                    self, n_evaluations, time.time() - start_optimization, best_so_far_y)
+                if is_break: break
+            
             # check four termination criteria
             runtime = time.time() - start_optimization
-            if n_evaluations >= self.max_evaluations:
-                break
-            if runtime >= self.max_runtime:
-                termination = "max_runtime"
-                break
-            if best_so_far_y <= self.threshold_fitness:
-                termination = "threshold_fitness"
-                break
+            is_break, termination = MuCommaLambda._check_terminations(
+                self, n_evaluations, runtime, best_so_far_y)
+            if is_break: break
             if sigma <= self.threshold_step_size:
                 termination = "threshold_step_size (lower)"
                 break
@@ -143,15 +127,7 @@ class SDA(MuCommaLambda):
             sigma = sigma * np.exp((st.norm.cdf(Z) / (1 - p_star) - 1) / d_sigma)
             if self.save_step_size_data: step_size_data.append(sigma)
         
-        if self.save_fitness_data:
-            start_compression = time.time()
-            fitness_data = compress_fitness_data(fitness_data, self.len_fitness_data)
-            time_compression = time.time() - start_compression
-        else:
-            fitness_data, time_compression = None, None
-
-        if self.save_best_so_far_x:
-            np.savetxt(self.txt_best_so_far_x, history_x)
+        fitness_data, time_compression = MuCommaLambda._save_data(self, history_x, fitness_data)
         
         results = {"best_so_far_x": best_so_far_x,
             "best_so_far_y": best_so_far_y,
