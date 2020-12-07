@@ -80,6 +80,7 @@ class RestartRm(MuCommaLambda):
                 MEP = np.zeros((n_evolution_paths, self.ndim_problem))
                 t_hat = np.zeros((n_evolution_paths,))
                 p = np.zeros((self.ndim_problem,))
+                X = np.empty((self.n_individuals, self.ndim_problem)) # population
                 Y = np.tile(y, (self.n_individuals,))
                 RR = np.arange(1, self.n_parents * 2 + 1) # ranks
                 p_c2 = np.sqrt(self.c_c * (2 - self.c_c) * mu_eff)
@@ -89,7 +90,6 @@ class RestartRm(MuCommaLambda):
                 
                 is_restart = False
             
-            X = np.empty((self.n_individuals, self.ndim_problem)) # population
             Y_bak = np.copy(Y)
             for i in range(self.n_individuals):
                 z = self.rng.standard_normal((self.ndim_problem,))
