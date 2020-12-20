@@ -40,7 +40,6 @@ class RankOne(MuCommaLambda):
         y = fitness_function(m)
         time_evaluations, n_evaluations = time.time() - start_evaluation, 1
         best_so_far_x, best_so_far_y = np.copy(m), np.copy(y)
-        
         if self.save_fitness_data: fitness_data = [y]
         if self.save_best_so_far_x: history_x = np.hstack((n_evaluations, best_so_far_x))
         else: history_x = None
@@ -48,7 +47,7 @@ class RankOne(MuCommaLambda):
         # set weights for parents selection
         w, w_1 = np.log(np.arange(1, self.n_parents + 1)), np.log(self.n_parents + 1)
         w = (w_1 - w) / (self.n_parents * w_1 - np.sum(w))
-        # normalization fatcor for principal search direction adaptation
+        # normalization factor for principal search direction adaptation
         mu_eff = 1 / np.sum(np.power(w, 2))
         
         # iterate / evolve
@@ -80,8 +79,8 @@ class RankOne(MuCommaLambda):
                 Y[i] = y
 
                 # update best-so-far x and y
-                if self.save_fitness_data: fitness_data.append(np.copy(y))
                 if best_so_far_y > y: best_so_far_x, best_so_far_y = np.copy(X[i, :]), np.copy(y)
+                if self.save_fitness_data: fitness_data.append(np.copy(y))
                 if self.save_best_so_far_x and not(n_evaluations % self.freq_best_so_far_x):
                     history_x = np.vstack((history_x, np.hstack((n_evaluations, best_so_far_x))))
                 
