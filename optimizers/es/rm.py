@@ -72,7 +72,7 @@ class Rm(MuCommaLambda):
         # constant symbols for Line 11 of Algorithm 3
         p_1, p_2 = 1 - self.c, np.sqrt(self.c * (2 - self.c) * mu_eff)
         # constant symbols for Line 13 of Algorithm 3
-        RR = np.arange(1, self.n_parents * 2 + 1) # ranks
+        RR = np.arange(1, self.n_parents * 2 + 1) # ranks for R_t, R_(t+1)
 
         X = np.empty((self.n_individuals, self.ndim_problem)) # population
         Y = np.tile(y, (self.n_individuals,)) # fitness of population
