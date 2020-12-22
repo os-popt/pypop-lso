@@ -16,7 +16,6 @@ class Rechenberg(OnePlusOne):
     """
     def __init__(self, problem, options):
         options.setdefault("optimizer_name", "Rechenberg (Rechenberg's (1+1)-ES)")
-        OnePlusOne._check_n_individuals(self, options, self.__class__.__name__)
         OnePlusOne.__init__(self, problem, options)
     
     def optimize(self, fitness_function=None):
@@ -25,32 +24,31 @@ class Rechenberg(OnePlusOne):
         if (fitness_function is None) and (self.fitness_function != None):
             fitness_function = self.fitness_function
         
-        # initialize
-        x = OnePlusOne._get_m(self) # population with one individual
+        # initialize population with one parent and one offspring
+        x = OnePlusOne._get_m(self) # one offspring
         start_evaluation = time.time()
-        y = fitness_function(x) # evaluate fitness of population
-        n_evaluations, time_evaluations = 1, time.time() - start_evaluation
+        y = fitness_function(x)
+        time_evaluations, n_evaluations = time.time() - start_evaluation, 1
+        # Here best_so_far_x is chosen as only one parent for each generation/iteration
         best_so_far_x, best_so_far_y = np.copy(x), np.copy(y)
-        
         if self.save_fitness_data: fitness_data = [y]
         if self.save_best_so_far_x: history_x = np.hstack((n_evaluations, best_so_far_x))
         else: history_x = None
         
-        # iterate
+        # iterate / evolve
         termination = "max_evaluations" # by default
+        step_size = self.step_size # mutation strength (global step-size)
         while n_evaluations < self.max_evaluations:
-            # sample from normal distribution and then evaluate
-            x = best_so_far_x + self.step_size *\
-                self.rng.standard_normal((self.ndim_problem,))
+            # sample one offspring from normal distribution and then evaluate
+            x = best_so_far_x + step_size * self.rng.standard_normal((self.ndim_problem,))
             start_evaluation = time.time()
             y = fitness_function(x)
             time_evaluations += (time.time() - start_evaluation)
             n_evaluations += 1
             
-            if self.save_fitness_data: fitness_data.append(y)
-            
             # update best-so-far x and y
             if best_so_far_y > y: best_so_far_x, best_so_far_y = np.copy(x), np.copy(y)
+            if self.save_fitness_data: fitness_data.append(np.copy(y))
             if self.save_best_so_far_x and not(n_evaluations % self.freq_best_so_far_x):
                 history_x = np.vstack((history_x, np.hstack((n_evaluations, best_so_far_x))))
             
