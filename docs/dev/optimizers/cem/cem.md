@@ -33,12 +33,12 @@ Specific input arguments:
 
 * ```init_std```: initial ```std``` (also called global step-size) for sampling distribution.
   * Float scalar value larger than 0,
-  * If not set, default: 1.0.
+  * If not set, default: 1.0,
   * Only support isotropic Gaussian sampling distribution during initialization.
 
 * ```extra_std```: std decayed for updating ```std``` of sampling distribution.
   * Float scalar value larger than 0,
-  * If not set, default: 1.0.
+  * If not set, default: 1.0,
   * Only support isotropic Gaussian sampling distribution as decayed ```std```.
 
 * ```extra_decay_time```: number of epochs taken to decay std for updating std of sampling distribution.
