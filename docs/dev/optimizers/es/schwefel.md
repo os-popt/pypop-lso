@@ -11,7 +11,7 @@ Morgan Kaufmann Publishers, San Mateo, CA.
 
 ## Open-Source Implementation
 
-Its source code is openly available at the class [Schwefel](https://github.com/os-popt/pypop-lso/blob/master/optimizers/es/schwefel.py).
+Its source code is openly available at the class [Schwefel](https://github.com/os-popt/pypop-lso/blob/master/optimizers/es/schwefel.py). The **re-start** option is used by default, in order to alleviate premature convergence on difficult optimization problems.
 
 In the current implementation, only the *global* step-size is used and adapted via Rechenberg's 1/5 success rule during optimization process. The lack of individual step-size adaptation usually limits the performance for complex optimization problems.
 
