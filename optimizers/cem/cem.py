@@ -26,8 +26,10 @@ class CEM(MuCommaLambda):
         # fraction of the best individuals for updating mean + std of sampling distribution
         self.best_frac = options.get("best_frac", 0.05)
         # number of the best individuals for updating mean + std of sampling distribution
+        # == number of parents (n_parents) in ES terminology
         self.n_best = max(1, int(self.n_individuals * self.best_frac))
         # initial std for sampling distribution
+        # == global/individual step-size (step_size) in ES terminology
         self.init_std = options.get("init_std", 1.0)
         # std decayed for updating std of sampling distribution
         self.extra_std = options.get("extra_std", 1.0)
@@ -41,8 +43,8 @@ class CEM(MuCommaLambda):
             fitness_function = self.fitness_function
 
         # initialize distribution mean
-        m = MuCommaLambda._get_m(self)  # distribution mean
-        cur_std = self.init_std  # distribution std
+        m = MuCommaLambda._get_m(self) # distribution mean == _cur_mean
+        cur_std = self.init_std # distribution std
         start_evaluation = time.time()
         y = fitness_function(m)
         time_evaluations, n_evaluations = time.time() - start_evaluation, 1
@@ -55,8 +57,9 @@ class CEM(MuCommaLambda):
         termination = "max_evaluations"
         n_epoch = 0
 
-        X = np.empty((self.n_individuals, self.ndim_problem))  # population
-        Y = np.tile(y, (self.n_individuals,))  # fitness of population
+        # self.ndim_problem == _n_params
+        X = np.empty((self.n_individuals, self.ndim_problem)) # population
+        Y = np.tile(y, (self.n_individuals,)) # fitness of population
         while n_evaluations < self.max_evaluations:
             for i in range(self.n_individuals): # one generation / epoch
                 # sample
@@ -87,7 +90,7 @@ class CEM(MuCommaLambda):
                 self, n_evaluations, runtime, best_so_far_y)
             if is_break: break
 
-            # update distribution mean + std
+            # update distribution mean + std via Maximum Likelihood Estimation (MLE)
             index = np.argsort(Y)
             X = X[index, :]
             m = np.mean(X[:self.n_best, :], axis=0)
