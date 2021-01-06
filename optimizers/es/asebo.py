@@ -73,9 +73,9 @@ class ASEBO(MuCommaLambda):
                 pca_fit = pca.fit(G) # SVD
                 # take top n_t directions of maximum variance to construct covariance matrix
                 n_t = max(np.argmax(np.cumsum(pca_fit.explained_variance_ratio_) > self.epsilon) + 1, self.min_n_t)
-                if n_iterations == self.iota: n_t = self.n_t
                 U, U_ort = pca_fit.components_[:n_t], pca_fit.components_[n_t:]
                 UUT, UUT_ort = np.matmul(U.T, U), np.matmul(U_ort.T, U_ort)
+                if n_iterations == self.iota: n_t = self.n_t
             
             # sample from hybrid Gaussian distribution
             cov = ((alpha / self.ndim_problem) * np.eye(self.ndim_problem) + ((1 - alpha) / n_t) * UUT) * self.sigma
