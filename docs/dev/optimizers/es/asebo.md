@@ -13,6 +13,10 @@ https://github.com/jparkerholder/ASEBO
 
 ## Open-Source Implementation
 
+Its source code is openly available at the class [ASEBO](https://github.com/os-popt/pypop-lso/blob/master/optimizers/es/asebo.py).
+
+Here we include it just *for research purpose* (i.e., for empirical benchmarking).
+
 ## Input Arguments
 
 ## Algorithmic Features
