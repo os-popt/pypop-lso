@@ -19,6 +19,13 @@ Here we include it just *for research purpose* (i.e., for empirical benchmarking
 
 ## Input Arguments
 
+Specific input arguments:
+
+  * ```n_t```: number of samples/individuals (decision vectors / candidate solutions) before ```iota``` iterations/generations.
+    * Integer scalar value larger than 0,
+    * If not set, default: 100,
+    * Before ```iota``` iterations, the actual number of samples is ```2 * n_t``` owing to the used *antithetic sampling* mechanism. After that, it will be adapted automatically during optimization.
+
 ## Algorithmic Features
 
 ## Numerical Experiments
