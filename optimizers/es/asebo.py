@@ -142,7 +142,7 @@ class ASEBO(MuCommaLambda):
             mt = m / (1 - 0.9 ** n_iterations)
             v = 0.999 * v + (1 - 0.999) * (gradient ** 2)
             vt = v / (1 - 0.999 ** n_iterations)
-            x += (self.eta * mt / (np.sqrt(vt) + 1e-8))
+            x -= (self.eta * mt / (np.sqrt(vt) + 1e-8))
             n_iterations += 1
         
         fitness_data, time_compression = MuCommaLambda._save_data(self, history_x, fitness_data)
