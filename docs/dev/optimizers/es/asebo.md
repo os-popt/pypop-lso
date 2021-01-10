@@ -26,6 +26,10 @@ Specific input arguments:
     * If not set, default: 100,
     * Before ```iota``` iterations, the actual number of samples is ```2 * n_t``` owing to the used *antithetic sampling* mechanism. After that, it will be adapted automatically during optimization.
 
+  * ```min_n_t```: minimum of samples at each iteration.
+    * Integer scalar value larger than 0,
+    * If not set, default: 10.
+
 ## Algorithmic Features
 
 ## Numerical Experiments
