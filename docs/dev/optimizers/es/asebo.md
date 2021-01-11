@@ -21,6 +21,10 @@ Here we include it just *for research purpose* (i.e., for empirical benchmarking
 
 Specific input arguments:
 
+  * ```iota```: number of iterations of full sampling.
+    * Integer scalar value larger than 0,
+    * If not set, raise a ValueError.
+
   * ```n_t```: number of samples/individuals (decision vectors / candidate solutions) before ```iota``` iterations/generations.
     * Integer scalar value larger than 0,
     * If not set, default: 100,
