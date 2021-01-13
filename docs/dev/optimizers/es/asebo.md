@@ -37,6 +37,10 @@ Specific input arguments:
   * ```epsilon```: threshold for PCA.
     * Float scalar value ranged in (0.0, 1.0),
     * If not set, default: 0.995.
+  
+  * ```sigma```: smoothing parameter for covariance matrix update.
+    * Float scalar value ranged in (0.0, 1.0],
+    * If not set, default: 0.02.
 
 ## Algorithmic Features
 
