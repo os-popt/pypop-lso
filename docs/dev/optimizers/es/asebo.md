@@ -38,9 +38,13 @@ Specific input arguments:
     * Float scalar value ranged in (0.0, 1.0),
     * If not set, default: 0.995.
   
-  * ```sigma```: smoothing parameter for covariance matrix update.
+  * ```sigma```: smoothing parameter for sampling.
     * Float scalar value ranged in (0.0, 1.0],
     * If not set, default: 0.02.
+
+  * ```gamma```: decay rate of covariance matrix adaptation.
+    * Float scalar value ranged in (0.0, 1.0),
+    * If not set, default: 0.995.
 
 ## Algorithmic Features
 
