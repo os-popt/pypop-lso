@@ -45,6 +45,10 @@ Specific input arguments:
   * ```gamma```: decay rate of covariance matrix adaptation.
     * Float scalar value ranged in (0.0, 1.0),
     * If not set, default: 0.995.
+  
+  * ```eta```: learning rate of Adam optimizer.
+    * Float scalar value ranged in (0.0, 1.0),
+    * If not set, default: 0.02.
 
 ## Algorithmic Features
 
