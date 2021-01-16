@@ -49,6 +49,11 @@ Specific input arguments:
   * ```eta```: learning rate of Adam optimizer.
     * Float scalar value ranged in (0.0, 1.0),
     * If not set, default: 0.02.
+  
+  * ```alpha```: sampling probability from isotropic Gaussian distribution.
+    * Float scalar value ranged in [0.0, 1.0],
+    * If not set, default: 1.
+    * It is fixed before ```iota``` iterations and then automatically adjusted via *adaptive exploration mechanism*.
 
 ## Algorithmic Features
 
