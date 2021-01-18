@@ -46,6 +46,7 @@ class Rm(MuCommaLambda):
         time_evaluations, n_evaluations = time.time() - start_evaluation, 1
         best_so_far_x, best_so_far_y = np.copy(m), np.copy(y)
         if self.save_fitness_data: fitness_data = [y]
+        else: fitness_data = None
         if self.save_best_so_far_x: history_x = np.hstack((n_evaluations, best_so_far_x))
         else: history_x = None
 
